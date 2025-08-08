@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/shared/Sidebar';
 import { Header } from '@/components/shared/Header';
 import { useAuthStore } from '@/store/auth.store';
@@ -10,7 +11,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { initialize } = useAuthStore();
+  const router = useRouter();
+  const { isAuthenticated, initialize } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -18,9 +20,14 @@ export default function AdminLayout({
     setIsInitialized(true);
   }, [initialize]);
 
-  if (!isInitialized) {
-    // Tampilkan loading state atau null untuk mencegah FOUC (flash of unstyled content)
-    return null; 
+  useEffect(() => {
+    if (isInitialized && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isInitialized, isAuthenticated, router]);
+
+  if (!isInitialized || !isAuthenticated) {
+    return null;
   }
 
   return (
