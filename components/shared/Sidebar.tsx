@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Shapes, LayoutDashboard } from 'lucide-react';
+import { Shapes, LayoutDashboard, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
@@ -8,8 +9,7 @@ const navItems = [
 ];
 
 export function Sidebar({ className }: { className?: string }) {
-  // NOTE: Penanganan active link akan kita tambahkan nanti
-  // const pathname = usePathname();
+  const pathname = usePathname();
 
   return (
     <div className={cn("pb-12", className)}>
@@ -27,7 +27,7 @@ export function Sidebar({ className }: { className?: string }) {
                 href={item.href}
                 className={cn(
                   'flex items-center rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary cursor-pointer',
-                  // pathname === item.href && 'bg-primary/10 text-primary'
+                  pathname === item.href && 'bg-primary/10 text-primary'
                 )}
               >
                 <item.icon className="mr-2 h-4 w-4" />

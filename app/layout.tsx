@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryProvider>
           {children}
-          <Toaster richColors toastOptions={{ style: { zIndex: 9999 } }} />
+          <Toaster richColors />
         </ReactQueryProvider>
       </body>
     </html>
