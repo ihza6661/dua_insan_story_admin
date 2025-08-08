@@ -24,3 +24,12 @@ export interface ValidationError {
         [key: string]: string[];
     };
 }
+
+export interface ProductCategory {
+    id: number;
+    name: string;
+    slug: string;
+    description: string | null;
+    image: string | null;
+    created_at: string;
+}

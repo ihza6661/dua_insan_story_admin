@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
-        <Toaster richColors />
+        <ReactQueryProvider>
+          {children}
+          <Toaster richColors toastOptions={{ style: { zIndex: 9999 } }} />
+        </ReactQueryProvider>
       </body>
     </html>
   );
