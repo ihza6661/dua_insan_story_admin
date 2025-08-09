@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { Shapes, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { Shapes, LayoutDashboard, ShoppingBag, Wand2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/admin/kategori', icon: Shapes, label: 'Kategori Produk' },
+  { href: '/admin/atribut', icon: Wand2, label: 'Atribut' },
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
 ];
 
