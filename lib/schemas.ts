@@ -48,3 +48,11 @@ export const attributeValueSchema = z.object({
 
 export type AttributeValueSchema = z.infer<typeof attributeValueSchema>;
 
+export const addOnSchema = z.object({
+  name: z.string().min(3, { message: "Nama item minimal harus 3 karakter." }),
+  price: z.coerce.number().min(0, { message: "Harga tidak boleh negatif." }),
+});
+
+export type AddOnSchema = z.infer<typeof addOnSchema>;
+
+
