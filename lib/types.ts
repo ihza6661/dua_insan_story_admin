@@ -33,3 +33,52 @@ export interface ProductCategory {
     image: string | null;
     created_at: string;
 }
+
+export interface ProductImage {
+    id: number;
+    image_path: string;
+    alt_text: string | null;
+    is_featured: boolean;
+}
+
+export interface AttributeValue {
+    id: number;
+    value: string;
+}
+
+export interface Attribute {
+    id: number;
+    name: string;
+    values: AttributeValue[];
+}
+
+export interface ProductOption {
+    id: number;
+    price_adjustment: number;
+    value: AttributeValue;
+}
+
+export interface AddOn {
+    id: number;
+    name: string;
+    price: number;
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    sku: string | null;
+    description: string | null;
+    base_price: number;
+    min_order_quantity: number;
+    is_active: boolean;
+    created_at: string;
+    category: {
+        id: number;
+        name: string;
+    };
+    images: ProductImage[];
+    options: ProductOption[];
+    add_ons: AddOn[];
+}

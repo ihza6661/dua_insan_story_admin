@@ -24,3 +24,14 @@ export const categorySchema = z.object({
 });
 
 export type CategorySchema = z.infer<typeof categorySchema>;
+
+export const productSchema = z.object({
+  name: z.string().min(3, { message: "Nama produk minimal harus 3 karakter." }),
+  category_id: z.string().min(1, { message: "Kategori wajib dipilih." }),
+  description: z.string().optional(),
+  base_price: z.coerce.number().min(1, { message: "Harga dasar harus diisi." }),
+  min_order_quantity: z.coerce.number().min(1, { message: "Minimal order harus diisi." }),
+  is_active: z.boolean().default(true),
+});
+
+export type ProductSchema = z.infer<typeof productSchema>;

@@ -11,7 +11,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ProductCategory } from "@/lib/types"
@@ -122,13 +121,6 @@ export const columns: ColumnDef<ProductCategory>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(category.id.toString())}
-                className="cursor-pointer"
-              >
-                Salin ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href={`/admin/kategori/${category.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
