@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import { AttributeSchema } from "@/lib/schemas";
+import { AttributeSchema, AttributeValueSchema } from "@/lib/schemas";
 import { Attribute } from "@/lib/types";
 
 interface AttributesResponse {
@@ -32,5 +32,20 @@ export async function updateAttribute({ id, data }: { id: number, data: Attribut
 
 export async function deleteAttribute(id: number): Promise<any> {
     const response = await api.delete(`/admin/attributes/${id}`);
+    return response.data;
+}
+
+export async function createAttributeValue({ attributeId, data }: { attributeId: number, data: AttributeValueSchema }): Promise<any> {
+    const response = await api.post(`/admin/attributes/${attributeId}/values`, data);
+    return response.data;
+}
+
+export async function updateAttributeValue({ id, data }: { id: number, data: AttributeValueSchema }): Promise<any> {
+    const response = await api.patch(`/admin/values/${id}`, data);
+    return response.data;
+}
+
+export async function deleteAttributeValue(id: number): Promise<any> {
+    const response = await api.delete(`/admin/values/${id}`);
     return response.data;
 }

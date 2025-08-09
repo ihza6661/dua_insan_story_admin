@@ -41,3 +41,10 @@ export const attributeSchema = z.object({
 });
 
 export type AttributeSchema = z.infer<typeof attributeSchema>;
+
+export const attributeValueSchema = z.object({
+    value: z.string().min(1, { message: "Nilai tidak boleh kosong." }),
+});
+
+export type AttributeValueSchema = z.infer<typeof attributeValueSchema>;
+

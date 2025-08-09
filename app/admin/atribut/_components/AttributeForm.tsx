@@ -40,10 +40,10 @@ export function AttributeForm({ initialData }: AttributeFormProps) {
 
   const { mutate: createMutate, isPending: isCreating } = useMutation({
     mutationFn: createAttribute,
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success("Atribut berhasil dibuat.");
       queryClient.invalidateQueries({ queryKey: ["attributes"] });
-      router.push("/admin/atribut");
+      router.push(`/admin/atribut/${response.data.id}/edit`);
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage =

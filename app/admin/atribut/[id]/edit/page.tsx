@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AttributeForm } from "../../_components/AttributeForm";
+import { AttributeValuesManager } from "../../_components/AttributeValuesManager";
 import { getAttributeById } from "@/services/api/attribute.service";
 
 export default function EditAtributPage() {
@@ -40,13 +41,18 @@ export default function EditAtributPage() {
         <CardHeader>
           <CardTitle>Edit Atribut</CardTitle>
           <CardDescription>
-            Perbarui nama atribut di bawah ini.
+            Perbarui nama atribut dan kelola nilai-nilainya di bawah ini.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading && <p>Memuat data atribut...</p>}
           {error && <p className="text-destructive">Gagal memuat data.</p>}
-          {attribute && <AttributeForm initialData={attribute} />}
+          {attribute && (
+            <>
+              <AttributeForm initialData={attribute} />
+              <AttributeValuesManager attribute={attribute} />
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
