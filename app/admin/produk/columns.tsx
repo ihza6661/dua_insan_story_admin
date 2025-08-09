@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link";
+import Image from "next/image";
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
@@ -11,10 +12,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Product } from "@/lib/types"
 import { DeleteProductAction } from "./_components/DeleteProductAction";
+
+const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -34,6 +38,30 @@ export const columns: ColumnDef<Product>[] = [
       return <div className="text-center font-medium">{row.index + 1}</div>;
     },
     accessorFn: (row, index) => index,
+  },
+  {
+    id: "image",
+    header: "Gambar",
+    cell: ({ row }) => {
+      const featuredImage = row.original.featured_image;
+      const imageUrl = featuredImage ? `${STORAGE_URL}/${featuredImage.image}` : null;
+
+      return (
+        <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={row.original.name}
+              fill
+              sizes="6rem"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-xs text-muted-foreground">No Image</div>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "name",

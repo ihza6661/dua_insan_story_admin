@@ -36,7 +36,7 @@ export interface ProductCategory {
 
 export interface ProductImage {
     id: number;
-    image_path: string;
+    image: string;
     alt_text: string | null;
     is_featured: boolean;
 }
@@ -81,4 +81,5 @@ export interface Product {
     images: ProductImage[];
     options: ProductOption[];
     add_ons: AddOn[];
+    featured_image: ProductImage | null;
 }
