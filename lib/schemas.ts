@@ -49,10 +49,35 @@ export const attributeValueSchema = z.object({
 export type AttributeValueSchema = z.infer<typeof attributeValueSchema>;
 
 export const addOnSchema = z.object({
-  name: z.string().min(3, { message: "Nama item minimal harus 3 karakter." }),
-  price: z.coerce.number().min(0, { message: "Harga tidak boleh negatif." }),
+    name: z.string().min(3, { message: "Nama item minimal harus 3 karakter." }),
+    price: z.coerce.number().min(0, { message: "Harga tidak boleh negatif." }),
 });
 
 export type AddOnSchema = z.infer<typeof addOnSchema>;
 
+export const userSchema = z.object({
+    full_name: z.string().min(3, { message: "Nama lengkap minimal harus 3 karakter." }),
+    email: z.string().email({ message: "Format email tidak valid." }),
+    phone_number: z.string().optional(),
+    password: z.string().min(8, { message: "Password minimal harus 8 karakter." }),
+    password_confirmation: z.string(),
+}).refine((data) => data.password === data.password_confirmation, {
+    message: "Konfirmasi password tidak cocok.",
+    path: ["password_confirmation"],
+});
+
+export type UserSchema = z.infer<typeof userSchema>;
+
+export const updateUserSchema = z.object({
+    full_name: z.string().min(3, { message: "Nama lengkap minimal harus 3 karakter." }),
+    email: z.string().email({ message: "Format email tidak valid." }),
+    phone_number: z.string().optional(),
+    password: z.string().min(8, { message: "Password minimal harus 8 karakter." }).optional().or(z.literal('')),
+    password_confirmation: z.string().optional(),
+}).refine((data) => data.password === data.password_confirmation, {
+    message: "Konfirmasi password tidak cocok.",
+    path: ["password_confirmation"],
+});
+
+export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 
