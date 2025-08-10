@@ -83,3 +83,17 @@ export interface Product {
     add_ons: AddOn[];
     featured_image: ProductImage | null;
 }
+
+export interface GalleryItem {
+    id: number;
+    title: string | null;
+    description: string | null;
+    category: string | null;
+    media_type: 'image' | 'video';
+    file_url: string;
+    product: {
+        id: number;
+        name: string;
+    } | null;
+    created_at: string;
+}

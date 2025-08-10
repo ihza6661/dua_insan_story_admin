@@ -81,3 +81,29 @@ export const updateUserSchema = z.object({
 
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 
+const MAX_FILE_SIZE_GALLERY = 20 * 1024 * 1024; // 20MB
+const ACCEPTED_MEDIA_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "video/mp4", "video/webm"];
+
+export const galleryItemSchema = z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    category: z.string().optional(),
+    product_id: z.string().optional(),
+    file: z
+        .any()
+        .refine((files) => files?.[0], "File tidak boleh kosong.")
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE_GALLERY, `Ukuran file maksimal adalah 20MB.`)
+        .refine(
+            (files) => ACCEPTED_MEDIA_TYPES.includes(files?.[0]?.type),
+            "Hanya format .jpg, .jpeg, .png, .webp, .mp4, dan .webm yang didukung."
+        ),
+});
+
+export type GalleryItemSchema = z.infer<typeof galleryItemSchema>;
+
+export const updateGalleryItemSchema = galleryItemSchema.extend({
+    file: z.any().optional(),
+});
+
+export type UpdateGalleryItemSchema = z.infer<typeof updateGalleryItemSchema>;
+
