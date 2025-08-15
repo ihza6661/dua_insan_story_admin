@@ -1,6 +1,6 @@
 import api from "@/lib/api";
-import { ProductSchema } from "@/lib/schemas";
-import { Product } from "@/lib/types";
+import { ProductSchema, UpdateVariantSchema, VariantSchema } from "@/lib/schemas";
+import { Product, ProductVariant } from "@/lib/types";
 
 interface ProductsResponse {
     data: Product[];
@@ -13,6 +13,10 @@ interface ProductResponse {
 interface MutateProductResponse {
     message: string;
     data: Product;
+}
+
+interface VariantResponse {
+    data: ProductVariant;
 }
 
 export async function getProducts(): Promise<Product[]> {
@@ -34,7 +38,7 @@ export async function createProduct(data: ProductSchema): Promise<MutateProductR
 }
 
 export async function updateProduct({ id, data }: { id: number, data: ProductSchema }): Promise<MutateProductResponse> {
-    const response = await api.patch<MutateProductResponse>(`/admin/products/${id}`, {
+    const response = await api.put<MutateProductResponse>(`/admin/products/${id}`, {
         ...data,
         category_id: Number(data.category_id),
     });
@@ -42,12 +46,36 @@ export async function updateProduct({ id, data }: { id: number, data: ProductSch
 }
 
 export async function deleteProduct(id: number): Promise<any> {
-  const response = await api.delete(`/admin/products/${id}`);
-  return response.data;
+    const response = await api.delete(`/admin/products/${id}`);
+    return response.data;
 }
 
-export async function uploadProductImages({ id, formData }: { id: number, formData: FormData }): Promise<any> {
-    const response = await api.post(`/admin/products/${id}/images`, formData, {
+export async function getVariantById(id: number): Promise<ProductVariant> {
+    const response = await api.get<VariantResponse>(`/admin/variants/${id}`);
+    return response.data.data;
+}
+
+export async function createProductVariant({ productId, data }: { productId: number, data: VariantSchema }): Promise<any> {
+    const payload = {
+        ...data,
+        options: data.options.map(Number),
+    };
+    const response = await api.post(`/admin/products/${productId}/variants`, payload);
+    return response.data;
+}
+
+export async function deleteProductVariant(id: number): Promise<any> {
+    const response = await api.delete(`/admin/variants/${id}`);
+    return response.data;
+}
+
+export async function updateProductVariant({ id, data }: { id: number, data: UpdateVariantSchema }): Promise<any> {
+    const response = await api.put(`/admin/variants/${id}`, data);
+    return response.data;
+}
+
+export async function uploadVariantImages({ variantId, formData }: { variantId: number, formData: FormData }): Promise<any> {
+    const response = await api.post(`/admin/variants/${variantId}/images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -55,18 +83,8 @@ export async function uploadProductImages({ id, formData }: { id: number, formDa
     return response.data;
 }
 
-export async function deleteProductImage(id: number): Promise<any> {
+export async function deleteVariantImage(id: number): Promise<any> {
     const response = await api.delete(`/admin/images/${id}`);
-    return response.data;
-}
-
-export async function createProductOption({ productId, data }: { productId: number, data: { attribute_value_id: number, price_adjustment: number } }): Promise<any> {
-    const response = await api.post(`/admin/products/${productId}/options`, data);
-    return response.data;
-}
-
-export async function deleteProductOption(id: number): Promise<any> {
-    const response = await api.delete(`/admin/options/${id}`);
     return response.data;
 }
 

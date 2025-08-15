@@ -107,3 +107,18 @@ export const updateGalleryItemSchema = galleryItemSchema.extend({
 
 export type UpdateGalleryItemSchema = z.infer<typeof updateGalleryItemSchema>;
 
+export const variantSchema = z.object({
+    price: z.coerce.number().min(1, { message: "Harga harus diisi." }),
+    stock: z.coerce.number().min(0, { message: "Stok tidak boleh negatif." }).optional(),
+    options: z.array(z.string()).min(1, { message: "Setidaknya satu opsi harus dipilih." }),
+});
+
+export type VariantSchema = z.infer<typeof variantSchema>;
+
+export const updateVariantSchema = z.object({
+    price: z.coerce.number().min(1, { message: "Harga harus diisi." }),
+    stock: z.coerce.number().min(0, { message: "Stok tidak boleh negatif." }).optional(),
+});
+
+export type UpdateVariantSchema = z.infer<typeof updateVariantSchema>;
+

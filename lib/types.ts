@@ -62,13 +62,12 @@ export interface AddOn {
     id: number;
     name: string;
     price: number;
+    description: string | null;
 }
 
 export interface Product {
     id: number;
     name: string;
-    slug: string;
-    sku: string | null;
     description: string | null;
     base_price: number;
     min_order_quantity: number;
@@ -78,10 +77,9 @@ export interface Product {
         id: number;
         name: string;
     };
-    images: ProductImage[];
-    options: ProductOption[];
     add_ons: AddOn[];
-    featured_image: ProductImage | null;
+    featured_image: { image: string } | null;
+    variants: ProductVariant[];
 }
 
 export interface GalleryItem {
@@ -96,4 +94,20 @@ export interface GalleryItem {
         name: string;
     } | null;
     created_at: string;
+}
+
+export interface ProductVariantImage {
+    id: number;
+    image_url: string;
+    alt_text: string | null;
+    is_featured: boolean;
+}
+
+export interface ProductVariant {
+    id: number;
+    product_id: number;
+    price: number;
+    stock: number;
+    options: AttributeValue[];
+    images: ProductVariantImage[];
 }

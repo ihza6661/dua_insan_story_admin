@@ -5,12 +5,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { ImageIcon, Trash2, UploadCloud, X } from "lucide-react";
-import { useState } from "react";
+import { ImageIcon, Trash2, UploadCloud, Star } from "lucide-react";
 
-import { Product } from "@/lib/types";
+import { ProductVariant } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { deleteProductImage, uploadProductImages } from "@/services/api/product.service";
+import { deleteVariantImage, uploadVariantImages } from "@/services/api/product.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,42 +22,40 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
-
-interface ProductImageManagerProps {
-  product: Product;
+interface VariantImageManagerProps {
+  variant: ProductVariant;
 }
 
 interface ImageUploadForm {
   images: FileList;
 }
 
-export function ProductImageManager({ product }: ProductImageManagerProps) {
+export function VariantImageManager({ variant }: VariantImageManagerProps) {
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset } = useForm<ImageUploadForm>();
 
   const { mutate: uploadMutate, isPending: isUploading } = useMutation({
-    mutationFn: uploadProductImages,
+    mutationFn: uploadVariantImages,
     onSuccess: () => {
       toast.success("Gambar berhasil diunggah.");
-      queryClient.invalidateQueries({ queryKey: ["product", product.id] });
+      queryClient.invalidateQueries({ queryKey: ["variant", variant.id] });
+      queryClient.invalidateQueries({ queryKey: ["product", variant.product_id] });
       reset();
     },
     onError: (error: AxiosError<any>) => {
-      const errorMessage = error.response?.data?.message || "Gagal mengunggah gambar.";
-      toast.error(errorMessage);
+      toast.error(error.response?.data?.message || "Gagal mengunggah gambar.");
     },
   });
 
   const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
-    mutationFn: deleteProductImage,
+    mutationFn: deleteVariantImage,
     onSuccess: () => {
       toast.success("Gambar berhasil dihapus.");
-      queryClient.invalidateQueries({ queryKey: ["product", product.id] });
+      queryClient.invalidateQueries({ queryKey: ["variant", variant.id] });
+      queryClient.invalidateQueries({ queryKey: ["product", variant.product_id] });
     },
     onError: (error: AxiosError<any>) => {
-      const errorMessage = error.response?.data?.message || "Gagal menghapus gambar.";
-      toast.error(errorMessage);
+      toast.error(error.response?.data?.message || "Gagal menghapus gambar.");
     },
   });
 
@@ -69,7 +66,7 @@ export function ProductImageManager({ product }: ProductImageManagerProps) {
         formData.append("images[]", file);
       });
     }
-    uploadMutate({ id: product.id, formData });
+    uploadMutate({ variantId: variant.id, formData });
   };
 
   return (
@@ -94,13 +91,18 @@ export function ProductImageManager({ product }: ProductImageManagerProps) {
 
       <div>
         <h3 className="text-lg font-medium">Daftar Gambar</h3>
-        {product.images.length > 0 ? (
+        {variant.images.length > 0 ? (
           <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {product.images.map((image) => (
+            {variant.images.map((image) => (
               <div key={image.id} className="relative group border rounded-md overflow-hidden">
+                {image.is_featured && (
+                  <div className="absolute top-2 left-2 z-10 bg-primary text-primary-foreground rounded-full p-1.5">
+                    <Star className="h-4 w-4" />
+                  </div>
+                )}
                 <Image
-                  src={`${STORAGE_URL}/${image.image}`}
-                  alt={image.alt_text || product.name}
+                  src={`${image.image_url}`}
+                  alt={image.alt_text || 'Gambar Varian'}
                   width={200}
                   height={200}
                   className="aspect-square w-full object-cover"
@@ -138,7 +140,7 @@ export function ProductImageManager({ product }: ProductImageManagerProps) {
         ) : (
           <div className="mt-4 flex flex-col items-center justify-center text-center text-muted-foreground border-2 border-dashed rounded-md p-8">
             <ImageIcon className="h-12 w-12" />
-            <p className="mt-4">Belum ada gambar untuk produk ini.</p>
+            <p className="mt-4">Belum ada gambar untuk varian ini.</p>
           </div>
         )}
       </div>

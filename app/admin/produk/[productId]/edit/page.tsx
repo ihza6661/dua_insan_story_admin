@@ -21,14 +21,13 @@ import {
 } from "@/components/ui/tabs";
 
 import { ProductForm } from "../../_components/ProductForm";
-import { ProductImageManager } from "../../_components/ProductImageManager";
-import { ProductOptionsManager } from "../../_components/ProductOptionsManager";
+import { ProductVariantsManager } from "../../_components/ProductVariantsManager";
 import { ProductAddOnsManager } from "../../_components/ProductAddOnsManager";
 import { getProductById } from "@/services/api/product.service";
 
 export default function EditProdukPage() {
   const params = useParams();
-  const id = Number(params.id);
+  const id = Number(params.productId);
 
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', id],
@@ -56,10 +55,9 @@ export default function EditProdukPage() {
       </div>
 
       <Tabs defaultValue="detail">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="detail">Detail Produk</TabsTrigger>
-          <TabsTrigger value="images">Gambar</TabsTrigger>
-          <TabsTrigger value="options">Opsi</TabsTrigger>
+          <TabsTrigger value="variants">Varian</TabsTrigger>
           <TabsTrigger value="addons">Item Tambahan</TabsTrigger>
         </TabsList>
 
@@ -77,30 +75,16 @@ export default function EditProdukPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="images">
-          <Card>
-            <CardHeader>
-              <CardTitle>Gambar Produk</CardTitle>
-              <CardDescription>
-                Kelola semua gambar untuk produk ini.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {product && <ProductImageManager product={product} />}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="options">
+        <TabsContent value="variants">
            <Card>
             <CardHeader>
-              <CardTitle>Opsi Produk</CardTitle>
+              <CardTitle>Varian Produk</CardTitle>
               <CardDescription>
-                Kelola atribut dan variasi untuk produk ini.
+                Kelola kombinasi opsi, harga, stok, dan gambar untuk setiap varian.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {product && <ProductOptionsManager product={product} />}
+              {product && <ProductVariantsManager product={product} />}
             </CardContent>
           </Card>
         </TabsContent>
