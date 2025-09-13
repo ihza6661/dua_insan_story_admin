@@ -16,4 +16,19 @@ api.interceptors.request.use(config => {
     return config;
 });
 
+// Add a subscription to update the default headers whenever the token changes
+useAuthStore.subscribe(
+    (state) => state.token,
+    (token) => {
+        if (token) {
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } else {
+            delete api.defaults.headers.common['Authorization'];
+        }
+    },
+    {
+        fireImmediately: true, // Ensure it runs immediately on subscription
+    }
+);
+
 export default api;
