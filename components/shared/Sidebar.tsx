@@ -9,6 +9,7 @@ const navItems = [
   { href: '/admin/atribut', icon: Wand2, label: 'Atribut' },
   { href: '/admin/item-tambahan', icon: Puzzle, label: 'Item Tambahan' },
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
+  { href: '/admin/orders', icon: ShoppingBag, label: 'Pesanan' },
   { href: '/admin/galeri', icon: GalleryHorizontal, label: 'Galeri' },
   { href: '/admin/pengguna', icon: Users, label: 'Pengguna' },
 ];

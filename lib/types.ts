@@ -111,3 +111,23 @@ export interface ProductVariant {
     options: AttributeValue[];
     images: ProductVariantImage[];
 }
+
+export interface OrderItem {
+    id: number;
+    product_name: string;
+    quantity: number;
+    price: number;
+    subtotal: number;
+}
+
+export interface Order {
+    id: number;
+    user_id: number;
+    user_full_name: string;
+    status: string;
+    total_amount: number;
+    created_at: string;
+    shipping_address: string;
+    billing_address: string;
+    order_items: OrderItem[];
+}
