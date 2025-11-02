@@ -2,17 +2,49 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { useOrderDetail } from '@/lib/hooks/useOrders';
+import api from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
 const OrderDetailsPage = () => {
   const params = useParams();
   const orderId = params.orderId as string;
+  const queryClient = useQueryClient();
 
   const { data: orderData, isLoading, isError, error } = useOrderDetail(orderId);
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending_payment':
+        return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
+      case 'processing':
+        return <Badge variant="default">Diproses</Badge>;
+      case 'packing':
+        return <Badge variant="default">Dikemas</Badge>;
+      case 'shipped':
+        return <Badge variant="default">Dikirim</Badge>;
+      case 'completed':
+        return <Badge variant="success">Selesai</Badge>;
+      case 'cancelled':
+        return <Badge variant="destructive">Dibatalkan</Badge>;
+      default:
+        return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
+    }
+  };
+
+  const updateStatus = async (status: string) => {
+    try {
+      await api.post(`/admin/orders/${orderId}/status`, { status });
+      await queryClient.invalidateQueries({ queryKey: ['order', orderId] });
+    } catch (err) {
+      console.error('Failed to update status', err);
+      // Optionally, show an error message to the user
+    }
+  };
 
   if (isLoading) {
     return <p>Loading order details...</p>;
@@ -26,8 +58,6 @@ const OrderDetailsPage = () => {
     return <p>Order not found.</p>;
   }
 
-  console.log('Order object in frontend:', orderData);
-
   return (
     <div className="container mx-auto py-8">
       <h1 className="mb-6 text-3xl font-bold">Order Details #{orderData.id}</h1>
@@ -40,7 +70,7 @@ const OrderDetailsPage = () => {
           <CardContent>
             <p><strong>Order ID:</strong> {orderData.id}</p>
             <p><strong>Customer:</strong> {orderData.user_full_name}</p>
-            <p><strong>Status:</strong> <Badge variant={orderData.status === 'completed' ? 'default' : orderData.status === 'pending' ? 'secondary' : 'destructive'}>{orderData.status}</Badge></p>
+            <p><strong>Status:</strong> {getStatusBadge(orderData.order_status)}</p>
             <p><strong>Total Amount:</strong> Rp. {orderData.total_amount.toLocaleString('id-ID')}</p>
             <p><strong>Order Date:</strong> {new Date(orderData.created_at).toLocaleDateString()}</p>
           </CardContent>
@@ -57,10 +87,21 @@ const OrderDetailsPage = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Billing Address</CardTitle>
+            <CardTitle>Update Status</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>{orderData.billing_address}</p>
+          <CardContent className="flex flex-col space-y-2">
+            {orderData.order_status === 'processing' && (
+              <Button onClick={() => updateStatus('packing')}>Mark as Packing</Button>
+            )}
+            {orderData.order_status === 'packing' && (
+              <Button onClick={() => updateStatus('shipped')}>Mark as Shipped</Button>
+            )}
+            {orderData.order_status === 'shipped' && (
+              <Button onClick={() => updateStatus('completed')}>Mark as Completed</Button>
+            )}
+            {(orderData.order_status !== 'completed' && orderData.order_status !== 'cancelled') && (
+              <Button variant="destructive" onClick={() => updateStatus('cancelled')}>Cancel Order</Button>
+            )}
           </CardContent>
         </Card>
       </div>

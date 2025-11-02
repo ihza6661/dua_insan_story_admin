@@ -101,7 +101,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
                   </div>
                 )}
                 <Image
-                  src={`${image.image_url}`}
+                  src={`${image.image}`}
                   alt={image.alt_text || 'Gambar Varian'}
                   width={200}
                   height={200}

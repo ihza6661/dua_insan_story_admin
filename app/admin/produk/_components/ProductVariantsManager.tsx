@@ -66,7 +66,7 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
                       <div className="w-16 h-16 relative rounded-md overflow-hidden bg-muted">
                         {featuredImage ? (
                           <Image
-                            src={`${featuredImage.image_url}`}
+                            src={`${featuredImage.image}`}
                             alt="Gambar Varian"
                             fill
                             sizes="4rem"
