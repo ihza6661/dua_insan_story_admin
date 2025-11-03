@@ -15,13 +15,26 @@ export async function getAdminUsers(): Promise<User[]> {
     return response.data.data;
 }
 
+export async function getCustomerUsers(): Promise<User[]> {
+    const response = await api.get<UsersResponse>('/admin/users?role=customer');
+    return response.data.data;
+}
+
 export async function getAdminUserById(id: number): Promise<User> {
     const response = await api.get<UserResponse>(`/admin/users/${id}`);
     return response.data.data;
 }
 
 export async function createAdminUser(data: UserSchema): Promise<any> {
-    const response = await api.post('/admin/users', data);
+    return createUser(data, 'admin');
+}
+
+export async function createCustomerUser(data: UserSchema): Promise<any> {
+    return createUser(data, 'customer');
+}
+
+async function createUser(data: UserSchema, role: string): Promise<any> {
+    const response = await api.post('/admin/users', { ...data, role });
     return response.data;
 }
 

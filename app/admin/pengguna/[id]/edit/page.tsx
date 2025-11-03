@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserForm } from "../../_components/UserForm";
+import { UserForm } from "../../_shared/_components/UserForm";
 import { getAdminUserById } from "@/services/api/user.service";
 
 export default function EditPenggunaPage() {
@@ -26,11 +26,13 @@ export default function EditPenggunaPage() {
     enabled: !!id,
   });
 
+  const backLink = user?.role === "admin" ? "/admin/pengguna/admin" : "/admin/pengguna/customer";
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-4">
         <Button asChild variant="outline" size="sm">
-          <Link href="/admin/pengguna">
+          <Link href={backLink}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Kembali ke Daftar Pengguna
           </Link>
@@ -38,9 +40,9 @@ export default function EditPenggunaPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Edit Admin</CardTitle>
+          <CardTitle>{user?.role === "admin" ? "Edit Admin" : "Edit Customer"}</CardTitle>
           <CardDescription>
-            Perbarui detail akun admin di bawah ini.
+            {user?.role === "admin" ? "Perbarui detail akun admin di bawah ini." : "Perbarui detail akun customer di bawah ini."}
           </CardDescription>
         </CardHeader>
         <CardContent>

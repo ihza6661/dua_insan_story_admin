@@ -122,6 +122,23 @@ export interface OrderItem {
     subtotal: number;
 }
 
+export interface InvitationDetail {
+    bride_full_name: string;
+    groom_full_name: string;
+    bride_nickname: string;
+    groom_nickname: string;
+    bride_parents: string;
+    groom_parents: string;
+    akad_date: string;
+    akad_time: string;
+    akad_location: string;
+    reception_date: string;
+    reception_time: string;
+    reception_location: string;
+    gmaps_link: string | null;
+    prewedding_photo: string | null;
+}
+
 export interface Order {
     id: number;
     user_id: number;
@@ -132,4 +149,5 @@ export interface Order {
     shipping_address: string;
     billing_address: string;
     order_items: OrderItem[];
+    invitation_detail?: InvitationDetail;
 }

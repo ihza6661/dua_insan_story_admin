@@ -20,14 +20,15 @@ import {
 } from "@/components/ui/form";
 
 import { userSchema, UserSchema, updateUserSchema, UpdateUserSchema } from "@/lib/schemas";
-import { createAdminUser, updateAdminUser } from "@/services/api/user.service";
+import { createAdminUser, updateAdminUser, createCustomerUser } from "@/services/api/user.service";
 import { GenericError, User } from "@/lib/types";
 
 interface UserFormProps {
   initialData?: User;
+  role?: string;
 }
 
-export function UserForm({ initialData }: UserFormProps) {
+export function UserForm({ initialData, role = 'admin' }: UserFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isEditMode = !!initialData;
@@ -43,12 +44,16 @@ export function UserForm({ initialData }: UserFormProps) {
     },
   });
 
+  const mutationFn = role === 'admin' ? createAdminUser : createCustomerUser;
+  const queryKey = role === 'admin' ? "admin-users" : "customer-users";
+  const redirectUrl = role === 'admin' ? "/admin/pengguna/admin" : "/admin/pengguna/customer";
+
   const { mutate: createMutate, isPending: isCreating } = useMutation({
-    mutationFn: createAdminUser,
+    mutationFn,
     onSuccess: () => {
-      toast.success("Akun admin berhasil dibuat.");
-      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-      router.push("/admin/pengguna");
+      toast.success(`Akun ${role} berhasil dibuat.`);
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      router.push(redirectUrl);
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage =
@@ -61,11 +66,14 @@ export function UserForm({ initialData }: UserFormProps) {
 
   const { mutate: updateMutate, isPending: isUpdating } = useMutation({
     mutationFn: updateAdminUser,
-    onSuccess: () => {
-      toast.success("Akun admin berhasil diperbarui.");
+    onSuccess: (data) => {
+      const userRole = initialData?.role || 'admin';
+      const redirectUrl = userRole === 'admin' ? "/admin/pengguna/admin" : "/admin/pengguna/customer";
+      toast.success("Akun berhasil diperbarui.");
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      queryClient.invalidateQueries({ queryKey: ["customer-users"] });
       queryClient.invalidateQueries({ queryKey: ["admin-user", initialData?.id] });
-      router.push("/admin/pengguna");
+      router.push(redirectUrl);
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage =

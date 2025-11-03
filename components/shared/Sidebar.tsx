@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,7 +12,8 @@ const navItems = [
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
   { href: '/admin/orders', icon: ShoppingBag, label: 'Pesanan' },
   { href: '/admin/galeri', icon: GalleryHorizontal, label: 'Galeri' },
-  { href: '/admin/pengguna', icon: Users, label: 'Pengguna' },
+  { href: '/admin/pengguna/admin', icon: Users, label: 'Pengguna Admin' },
+  { href: '/admin/pengguna/customer', icon: Users, label: 'Pengguna Customer' },
 ];
 
 export function Sidebar({ className }: { className?: string }) {
@@ -21,8 +23,15 @@ export function Sidebar({ className }: { className?: string }) {
     <div className={cn("pb-12", className)}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
-          <Link href="/admin" className="cursor-pointer">
-            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+          <Link href="/admin" className="cursor-pointer flex items-center gap-2 px-4 py-8">
+            <Image
+              src="/duainsan.png"
+              alt="Dua Insan Story Logo"
+              width={50}
+              height={30}
+              priority
+            />
+            <h2 className="text-lg font-semibold tracking-tight">
               Dua Insan Story
             </h2>
           </Link>
