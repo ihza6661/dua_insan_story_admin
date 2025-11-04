@@ -25,13 +25,13 @@ export function Sidebar({ className }: { className?: string }) {
         <div className="px-3 py-2">
           <Link href="/admin" className="cursor-pointer flex items-center gap-2 px-4 py-8">
             <Image
-              src="/duainsan.png"
+              src="/newlogo.png"
               alt="Dua Insan Story Logo"
               width={50}
               height={30}
               priority
             />
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2 className="text-lg tracking-tight">
               Dua Insan Story
             </h2>
           </Link>
