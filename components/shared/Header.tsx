@@ -24,6 +24,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Sidebar } from './Sidebar';
+import { ThemeToggler } from './ThemeToggler';
 
 export function Header() {
   const { user, logout } = useAuthStore();
@@ -62,6 +63,7 @@ export function Header() {
 
         {/* Menu User di Kanan */}
         <div className="ml-auto flex items-center space-x-4">
+          <ThemeToggler />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full cursor-pointer">
@@ -95,3 +97,5 @@ export function Header() {
     </div>
   );
 }
+
+
