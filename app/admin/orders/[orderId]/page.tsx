@@ -36,6 +36,21 @@ const OrderDetailsPage = () => {
     }
   };
 
+  const getPaymentStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Badge variant="secondary">Menunggu</Badge>;
+      case 'partially_paid':
+        return <Badge variant="default">Dibayar Sebagian</Badge>;
+      case 'paid':
+        return <Badge variant="success">Lunas</Badge>;
+      case 'cancelled':
+        return <Badge variant="destructive">Dibatalkan</Badge>;
+      default:
+        return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
+    }
+  };
+
   const updateStatus = async (status: string) => {
     try {
       await api.post(`/admin/orders/${orderId}/status`, { status });
@@ -70,8 +85,9 @@ const OrderDetailsPage = () => {
           <CardContent>
             <p><strong>ID Order:</strong> {orderData.id}</p>
             <p><strong>Pelanggan:</strong> {orderData.user_full_name}</p>
-            <p><strong>Status:</strong> {getStatusBadge(orderData.order_status)}</p>
-            <p><strong>Jumlah Total:</strong> Rp. {orderData.total_amount.toLocaleString('id-ID')}</p>
+            <p><strong>Status Pesanan:</strong> {getStatusBadge(orderData.status)}</p>
+            <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p>
+            <p><strong>Jumlah Total:</strong> Rp. {typeof orderData.total_amount === 'number' ? orderData.total_amount.toLocaleString('id-ID') : 'N/A'}</p>
             <p><strong>Tanggal Pesanan:</strong> {new Date(orderData.created_at).toLocaleDateString()}</p>
           </CardContent>
         </Card>
@@ -112,6 +128,17 @@ const OrderDetailsPage = () => {
           </CardHeader>
           <CardContent>
             <p>{orderData.shipping_address}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Ringkasan Pembayaran</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p>
+            <p><strong>Jumlah Dibayar:</strong> Rp. {typeof orderData.amount_paid === 'number' ? orderData.amount_paid.toLocaleString('id-ID') : 'N/A'}</p>
+            <p><strong>Sisa Tagihan:</strong> Rp. {typeof orderData.remaining_balance === 'number' ? orderData.remaining_balance.toLocaleString('id-ID') : 'N/A'}</p>
           </CardContent>
         </Card>
 
@@ -164,6 +191,38 @@ const OrderDetailsPage = () => {
             </Table>
           ) : (
             <p>Tidak ada item di pesanan ini.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Riwayat Pembayaran</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {orderData.payments && orderData.payments.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Tanggal</TableHead>
+                  <TableHead>Jumlah</TableHead>
+                  <TableHead>Metode</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orderData.payments.map((payment) => (
+                  <TableRow key={payment.id}>
+                    <TableCell>{new Date(payment.payment_date).toLocaleDateString()}</TableCell>
+                    <TableCell>Rp. {payment.amount.toLocaleString('id-ID')}</TableCell>
+                    <TableCell>{payment.payment_method}</TableCell>
+                    <TableCell>{getPaymentStatusBadge(payment.status)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p>Tidak ada riwayat pembayaran untuk pesanan ini.</p>
           )}
         </CardContent>
       </Card>

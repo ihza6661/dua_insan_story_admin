@@ -30,6 +30,21 @@ const OrdersPage = () => {
     }
   };
 
+  const getPaymentStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Badge variant="secondary">Menunggu</Badge>;
+      case 'partially_paid':
+        return <Badge variant="default">Dibayar Sebagian</Badge>;
+      case 'paid':
+        return <Badge variant="destructive">Lunas</Badge>;
+      case 'cancelled':
+        return <Badge variant="destructive">Dibatalkan</Badge>;
+      default:
+        return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
+    }
+  };
+
   if (isLoading) {
     return <p>Memuat Pesanan...</p>;
   }
@@ -53,7 +68,9 @@ const OrdersPage = () => {
                   <TableHead>ID Order</TableHead>
                   <TableHead>Pelanggan</TableHead>
                   <TableHead>Jumlah Total</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Sisa Tagihan</TableHead>
+                  <TableHead>Status Pesanan</TableHead>
+                  <TableHead>Status Pembayaran</TableHead>
                   <TableHead>Tanggal Order</TableHead>
                   <TableHead>Alamat Pengiriman</TableHead>
                 </TableRow>
@@ -67,9 +84,13 @@ const OrdersPage = () => {
                   >
                     <TableCell className="font-medium">{order.id}</TableCell>
                     <TableCell>{order.user_full_name}</TableCell>
-                    <TableCell>Rp. {order.total_amount.toLocaleString('id-ID')}</TableCell>
+                    <TableCell>Rp. {typeof order.total_amount === 'number' ? order.total_amount.toLocaleString('id-ID') : 'N/A'}</TableCell>
+                    <TableCell>Rp. {typeof order.remaining_balance === 'number' ? order.remaining_balance.toLocaleString('id-ID') : 'N/A'}</TableCell>
                     <TableCell>
-                      {getStatusBadge(order.order_status)}
+                      {getStatusBadge(order.status)}
+                    </TableCell>
+                    <TableCell>
+                      {getPaymentStatusBadge(order.payment_status)}
                     </TableCell>
                     <TableCell>{(() => {
                       try {

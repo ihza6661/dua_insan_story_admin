@@ -140,14 +140,27 @@ export interface InvitationDetail {
 }
 
 export interface Order {
+    order_status: string;
     id: number;
     user_id: number;
     user_full_name: string;
     status: string;
     total_amount: number;
+    payment_status: string;
+    amount_paid: number;
+    remaining_balance: number;
     created_at: string;
     shipping_address: string;
     billing_address: string;
     order_items: OrderItem[];
     invitation_detail?: InvitationDetail;
+    payments: OrderPayment[];
+}
+
+export interface OrderPayment {
+    id: number;
+    payment_date: string;
+    amount: number;
+    payment_method: string;
+    status: string;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -21,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+// using native <img> for external/internal URLs to avoid Next.js optimization issues
 
 interface VariantImageManagerProps {
   variant: ProductVariant;
@@ -80,7 +80,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
             accept="image/png, image/jpeg, image/webp"
             {...register("images")}
             disabled={isUploading}
-            className="flex-grow text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            className="grow text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
           />
           <Button type="submit" disabled={isUploading}>
             <UploadCloud className="mr-2 h-4 w-4" />
@@ -100,12 +100,10 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
                     <Star className="h-4 w-4" />
                   </div>
                 )}
-                <Image
-                  src={`${image.image}`}
-                  alt={image.alt_text || 'Gambar Varian'}
-                  width={200}
-                  height={200}
-                  className="aspect-square w-full object-cover"
+                <img
+                  src={image.image}
+                  alt={image.alt_text ?? 'Gambar Varian'}
+                  className="w-full h-full object-cover aspect-square"
                 />
                 <div className="absolute top-2 right-2">
                   <AlertDialog>
