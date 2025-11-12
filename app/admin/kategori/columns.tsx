@@ -16,6 +16,8 @@ import {
 import { ProductCategory } from "@/lib/types"
 import { DeleteCategoryAction } from "./_components/DeleteCategoryAction";
 
+import { getImageUrl } from "@/lib/utils";
+
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export const columns: ColumnDef<ProductCategory>[] = [
@@ -40,8 +42,7 @@ export const columns: ColumnDef<ProductCategory>[] = [
     accessorKey: "image",
     header: "Gambar",
     cell: ({ row }) => {
-      const imagePath = row.getValue("image") as string | null;
-      const imageUrl = imagePath ? `${STORAGE_URL}/${imagePath}` : null;
+      const imageUrl = getImageUrl(row.getValue("image"));
 
       return (
         <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">

@@ -1,24 +1,32 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&>svg]:size-3 [&>svg]:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 transition-colors duration-200",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+          // Soft but readable primary tone for both modes
+          "border-transparent bg-primary/90 text-primary-foreground hover:bg-primary/80 dark:bg-primary/80 dark:hover:bg-primary/70",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+          // Muted background with subtle contrast in dark mode
+          "border-transparent bg-secondary/90 text-secondary-foreground hover:bg-secondary/80 dark:bg-secondary/70 dark:hover:bg-secondary/60",
         destructive:
-          "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          // Keep contrast high, balance saturation between modes
+          "border-transparent bg-destructive/90 text-white hover:bg-destructive/80 focus-visible:ring-destructive/40 dark:bg-destructive/70 dark:hover:bg-destructive/60",
         outline:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+          // Transparent with subtle hover tint
+          "border-border text-foreground hover:bg-accent/10 hover:text-accent-foreground dark:border-border dark:hover:bg-accent/20",
         success:
-          "border-transparent bg-green-600 text-white [a&]:hover:bg-green-700 focus-visible:ring-green-400 dark:bg-green-500 dark:[a&]:hover:bg-green-600",
+          // Consistent green tone with good readability
+          "border-transparent bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:ring-emerald-400 dark:bg-emerald-500 dark:hover:bg-emerald-600",
+        muted:
+          // Elegant neutral tag style
+          "border-transparent bg-muted text-muted-foreground hover:bg-muted/80 dark:bg-muted/60 dark:text-muted-foreground",
       },
     },
     defaultVariants: {
@@ -26,7 +34,6 @@ const badgeVariants = cva(
     },
   }
 )
-
 
 function Badge({
   className,
@@ -47,3 +54,4 @@ function Badge({
 }
 
 export { Badge, badgeVariants }
+

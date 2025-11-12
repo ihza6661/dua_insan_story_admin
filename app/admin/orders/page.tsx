@@ -13,18 +13,30 @@ const OrdersPage = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending_payment':
+      case 'Pending Payment':
         return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
-      case 'processing':
+      case 'Partially Paid':
+        return <Badge variant="secondary">DP Lunas</Badge>;
+      case 'Paid':
+        return <Badge variant="success">Lunas</Badge>;
+      case 'Processing':
         return <Badge variant="default">Diproses</Badge>;
-      case 'packing':
-        return <Badge variant="default">Dikemas</Badge>;
-      case 'shipped':
+      case 'Design Approval':
+        return <Badge variant="default">Persetujuan Desain</Badge>;
+      case 'In Production':
+        return <Badge variant="default">Dalam Produksi</Badge>;
+      case 'Shipped':
         return <Badge variant="default">Dikirim</Badge>;
-      case 'completed':
+      case 'Delivered':
+        return <Badge variant="default">Terkirim</Badge>;
+      case 'Completed':
         return <Badge variant="success">Selesai</Badge>;
-      case 'cancelled':
+      case 'Cancelled':
         return <Badge variant="destructive">Dibatalkan</Badge>;
+      case 'Failed':
+        return <Badge variant="destructive">Gagal</Badge>;
+      case 'Refunded':
+        return <Badge variant="destructive">Dikembalikan</Badge>;
       default:
         return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
     }
@@ -37,7 +49,7 @@ const OrdersPage = () => {
       case 'partially_paid':
         return <Badge variant="default">Dibayar Sebagian</Badge>;
       case 'paid':
-        return <Badge variant="destructive">Lunas</Badge>;
+        return <Badge variant="success">Lunas</Badge>;
       case 'cancelled':
         return <Badge variant="destructive">Dibatalkan</Badge>;
       default:
@@ -85,9 +97,9 @@ const OrdersPage = () => {
                     <TableCell className="font-medium">{order.id}</TableCell>
                     <TableCell>{order.user_full_name}</TableCell>
                     <TableCell>Rp. {typeof order.total_amount === 'number' ? order.total_amount.toLocaleString('id-ID') : 'N/A'}</TableCell>
-                    <TableCell>Rp. {typeof order.remaining_balance === 'number' ? order.remaining_balance.toLocaleString('id-ID') : 'N/A'}</TableCell>
+                    <TableCell>Rp. {Number(order.remaining_balance ?? Math.max(order.total_amount - (Number(order.amount_paid ?? 0)), 0)).toLocaleString('id-ID')}</TableCell>
                     <TableCell>
-                      {getStatusBadge(order.status)}
+                      {getStatusBadge(order.order_status)}
                     </TableCell>
                     <TableCell>
                       {getPaymentStatusBadge(order.payment_status)}

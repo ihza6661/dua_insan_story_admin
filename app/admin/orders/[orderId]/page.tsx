@@ -19,18 +19,30 @@ const OrderDetailsPage = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending_payment':
+      case 'Pending Payment':
         return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
-      case 'processing':
+      case 'Partially Paid':
+        return <Badge variant="secondary">DP Lunas</Badge>;
+      case 'Paid':
+        return <Badge variant="success">Lunas</Badge>;
+      case 'Processing':
         return <Badge variant="default">Diproses</Badge>;
-      case 'packing':
-        return <Badge variant="default">Dikemas</Badge>;
-      case 'shipped':
+      case 'Design Approval':
+        return <Badge variant="default">Persetujuan Desain</Badge>;
+      case 'In Production':
+        return <Badge variant="default">Dalam Produksi</Badge>;
+      case 'Shipped':
         return <Badge variant="default">Dikirim</Badge>;
-      case 'completed':
+      case 'Delivered':
+        return <Badge variant="default">Terkirim</Badge>;
+      case 'Completed':
         return <Badge variant="success">Selesai</Badge>;
-      case 'cancelled':
+      case 'Cancelled':
         return <Badge variant="destructive">Dibatalkan</Badge>;
+      case 'Failed':
+        return <Badge variant="destructive">Gagal</Badge>;
+      case 'Refunded':
+        return <Badge variant="destructive">Dikembalikan</Badge>;
       default:
         return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
     }
@@ -73,6 +85,11 @@ const OrderDetailsPage = () => {
     return <p>Pesanan tidak ditemukan.</p>;
   }
 
+  const amountPaid = Number(orderData.amount_paid ?? 0);
+  const remainingBalance = Number(
+    orderData.remaining_balance ?? Math.max(orderData.total_amount - amountPaid, 0)
+  );
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="mb-6 text-3xl font-bold">Detail Pesanan #{orderData.id}</h1>
@@ -85,8 +102,8 @@ const OrderDetailsPage = () => {
           <CardContent>
             <p><strong>ID Order:</strong> {orderData.id}</p>
             <p><strong>Pelanggan:</strong> {orderData.user_full_name}</p>
-            <p><strong>Status Pesanan:</strong> {getStatusBadge(orderData.status)}</p>
-            <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p>
+            <p><strong>Status Pesanan:</strong> {getStatusBadge(orderData.order_status)}</p>
+            {/* <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p> */}
             <p><strong>Jumlah Total:</strong> Rp. {typeof orderData.total_amount === 'number' ? orderData.total_amount.toLocaleString('id-ID') : 'N/A'}</p>
             <p><strong>Tanggal Pesanan:</strong> {new Date(orderData.created_at).toLocaleDateString()}</p>
           </CardContent>
@@ -137,8 +154,8 @@ const OrderDetailsPage = () => {
           </CardHeader>
           <CardContent>
             <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p>
-            <p><strong>Jumlah Dibayar:</strong> Rp. {typeof orderData.amount_paid === 'number' ? orderData.amount_paid.toLocaleString('id-ID') : 'N/A'}</p>
-            <p><strong>Sisa Tagihan:</strong> Rp. {typeof orderData.remaining_balance === 'number' ? orderData.remaining_balance.toLocaleString('id-ID') : 'N/A'}</p>
+            <p><strong>Jumlah Dibayar:</strong> Rp. {amountPaid.toLocaleString('id-ID')}</p>
+            <p><strong>Sisa Tagihan:</strong> Rp. {remainingBalance.toLocaleString('id-ID')}</p>
           </CardContent>
         </Card>
 
