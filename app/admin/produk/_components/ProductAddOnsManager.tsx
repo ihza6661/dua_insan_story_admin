@@ -109,7 +109,7 @@ export function ProductAddOnsManager({ product }: ProductAddOnsManagerProps) {
       <div>
         <h3 className="mb-4 text-lg font-medium">Tautkan Item Tambahan Baru</h3>
         <div className="flex flex-col gap-4 rounded-lg border p-4 md:flex-row md:items-end">
-          <div className="flex-grow">
+          <div className="grow">
             <label className="text-sm font-medium">Item Tambahan</label>
             <Select
               onValueChange={setSelectedAddOnId}
@@ -128,7 +128,7 @@ export function ProductAddOnsManager({ product }: ProductAddOnsManagerProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex-grow md:max-w-[200px]">
+          <div className="grow md:max-w-[200px]">
             <label className="text-sm font-medium">Berat (gram)</label>
             <Input
               type="number"
