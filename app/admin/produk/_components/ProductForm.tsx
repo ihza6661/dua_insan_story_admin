@@ -48,12 +48,14 @@ export function ProductForm({ initialData }: ProductFormProps) {
   });
 
   const form = useForm<ProductSchema>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(productSchema) as any,
     defaultValues: {
       name: initialData?.name ?? "",
       description: initialData?.description ?? "",
       category_id: initialData?.category?.id?.toString() ?? "",
       base_price: initialData?.base_price ?? 0,
+      weight: initialData?.weight ?? null,
       min_order_quantity: initialData?.min_order_quantity ?? 1,
       is_active: initialData?.is_active ?? true,
     },
@@ -79,11 +81,11 @@ export function ProductForm({ initialData }: ProductFormProps) {
 
   const { mutate: updateMutate, isPending: isUpdating } = useMutation({
     mutationFn: updateProduct,
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast.success("Produk Berhasil Diperbarui");
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["product", initialData?.id] });
-      router.push('/admin/produk');
+      router.push("/admin/produk");
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage =
@@ -181,12 +183,12 @@ export function ProductForm({ initialData }: ProductFormProps) {
           )}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
             control={form.control}
             name="base_price"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Harga Dasar (Rp)</FormLabel>
                 <FormControl>
                   <Input
@@ -200,11 +202,35 @@ export function ProductForm({ initialData }: ProductFormProps) {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Berat (gram)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Opsional"
+                    value={field.value ?? ""}
+                    onChange={(event) => field.onChange(event.target.value)}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormDescription className="mt-1 text-sm text-muted-foreground">
+                  Biarkan kosong jika tidak relevan.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="min_order_quantity"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Minimal Order</FormLabel>
                 <FormControl>
                   <Input
@@ -252,7 +278,11 @@ export function ProductForm({ initialData }: ProductFormProps) {
             Batal
           </Button>
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Menyimpan..." : (isEditMode ? "Simpan Perubahan" : "Simpan dan Lanjutkan")}
+            {isPending
+              ? "Menyimpan..."
+              : isEditMode
+              ? "Simpan Perubahan"
+              : "Simpan dan Lanjutkan"}
           </Button>
         </div>
       </form>

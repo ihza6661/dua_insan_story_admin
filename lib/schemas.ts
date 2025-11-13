@@ -30,6 +30,17 @@ export const productSchema = z.object({
     category_id: z.string().min(1, { message: "Kategori wajib dipilih." }),
     description: z.string().optional(),
     base_price: z.coerce.number().min(1, { message: "Harga dasar harus diisi." }),
+    weight: z.preprocess(
+        (val) => {
+            if (val === "" || val === null || val === undefined) {
+                return null;
+            }
+            return Number(val);
+        },
+        z.number()
+            .min(0, { message: "Berat tidak boleh negatif." })
+            .nullable()
+    ).optional(),
     min_order_quantity: z.coerce.number().min(1, { message: "Minimal order harus diisi." }),
     is_active: z.boolean().default(true),
 });
@@ -110,6 +121,14 @@ export type UpdateGalleryItemSchema = z.infer<typeof updateGalleryItemSchema>;
 export const variantSchema = z.object({
     price: z.coerce.number().min(1, { message: "Harga harus diisi." }),
     stock: z.coerce.number().min(0, { message: "Stok tidak boleh negatif." }).optional(),
+    weight: z
+        .preprocess((val) => {
+            if (val === "" || val === null || val === undefined) {
+                return null;
+            }
+            return Number(val);
+        }, z.number().min(0, { message: "Berat tidak boleh negatif." }).nullable())
+        .optional(),
     options: z.array(z.string()).min(1, { message: "Setidaknya satu opsi harus dipilih." }),
 });
 
@@ -118,6 +137,14 @@ export type VariantSchema = z.infer<typeof variantSchema>;
 export const updateVariantSchema = z.object({
     price: z.coerce.number().min(1, { message: "Harga harus diisi." }),
     stock: z.coerce.number().min(0, { message: "Stok tidak boleh negatif." }).optional(),
+    weight: z
+        .preprocess((val) => {
+            if (val === "" || val === null || val === undefined) {
+                return null;
+            }
+            return Number(val);
+        }, z.number().min(0, { message: "Berat tidak boleh negatif." }).nullable())
+        .optional(),
 });
 
 export type UpdateVariantSchema = z.infer<typeof updateVariantSchema>;

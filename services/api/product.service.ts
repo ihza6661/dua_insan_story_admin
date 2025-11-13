@@ -33,6 +33,7 @@ export async function createProduct(data: ProductSchema): Promise<MutateProductR
     const response = await api.post<MutateProductResponse>('/admin/products', {
         ...data,
         category_id: Number(data.category_id),
+        weight: data.weight ?? null,
     });
     return response.data;
 }
@@ -41,11 +42,12 @@ export async function updateProduct({ id, data }: { id: number, data: ProductSch
     const response = await api.put<MutateProductResponse>(`/admin/products/${id}`, {
         ...data,
         category_id: Number(data.category_id),
+        weight: data.weight ?? null,
     });
     return response.data;
 }
 
-export async function deleteProduct(id: number): Promise<any> {
+export async function deleteProduct(id: number): Promise<unknown> {
     const response = await api.delete(`/admin/products/${id}`);
     return response.data;
 }
@@ -55,26 +57,30 @@ export async function getVariantById(id: number): Promise<ProductVariant> {
     return response.data.data;
 }
 
-export async function createProductVariant({ productId, data }: { productId: number, data: VariantSchema }): Promise<any> {
+export async function createProductVariant({ productId, data }: { productId: number, data: VariantSchema }): Promise<unknown> {
     const payload = {
         ...data,
         options: data.options.map(Number),
+        weight: data.weight ?? null,
     };
     const response = await api.post(`/admin/products/${productId}/variants`, payload);
     return response.data;
 }
 
-export async function deleteProductVariant(id: number): Promise<any> {
+export async function deleteProductVariant(id: number): Promise<unknown> {
     const response = await api.delete(`/admin/variants/${id}`);
     return response.data;
 }
 
-export async function updateProductVariant({ id, data }: { id: number, data: UpdateVariantSchema }): Promise<any> {
-    const response = await api.put(`/admin/variants/${id}`, data);
+export async function updateProductVariant({ id, data }: { id: number, data: UpdateVariantSchema }): Promise<unknown> {
+    const response = await api.put(`/admin/variants/${id}`, {
+        ...data,
+        weight: data.weight ?? null,
+    });
     return response.data;
 }
 
-export async function uploadVariantImages({ variantId, formData }: { variantId: number, formData: FormData }): Promise<any> {
+export async function uploadVariantImages({ variantId, formData }: { variantId: number, formData: FormData }): Promise<unknown> {
     const response = await api.post(`/admin/variants/${variantId}/images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -83,17 +89,22 @@ export async function uploadVariantImages({ variantId, formData }: { variantId: 
     return response.data;
 }
 
-export async function deleteVariantImage(id: number): Promise<any> {
+export async function deleteVariantImage(id: number): Promise<unknown> {
     const response = await api.delete(`/admin/images/${id}`);
     return response.data;
 }
 
-export async function linkAddOnToProduct({ productId, addOnId }: { productId: number, addOnId: number }): Promise<any> {
-    const response = await api.post(`/admin/products/${productId}/add-ons`, { add_on_id: addOnId });
+export async function linkAddOnToProduct({ productId, addOnId, weight }: { productId: number, addOnId: number, weight?: number | null }): Promise<unknown> {
+    const payload: Record<string, unknown> = { add_on_id: addOnId };
+    if (weight !== undefined) {
+        payload.weight = weight ?? null;
+    }
+
+    const response = await api.post(`/admin/products/${productId}/add-ons`, payload);
     return response.data;
 }
 
-export async function unlinkAddOnFromProduct({ productId, addOnId }: { productId: number, addOnId: number }): Promise<any> {
+export async function unlinkAddOnFromProduct({ productId, addOnId }: { productId: number, addOnId: number }): Promise<unknown> {
     const response = await api.delete(`/admin/products/${productId}/add-ons/${addOnId}`);
     return response.data;
 }

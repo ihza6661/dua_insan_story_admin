@@ -24,8 +24,6 @@ import {
 import { CreateVariantForm } from "./CreateVariantForm";
 import { DeleteVariantAction } from "./DeleteVariantAction";
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
-
 interface ProductVariantsManagerProps {
   product: Product;
 }
@@ -35,8 +33,31 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
     return options.map(opt => opt.value).join(' / ');
   };
 
-  const findFeaturedImage = (images: { image_url: string, is_featured: boolean }[]) => {
+  const findFeaturedImage = (images: Product['variants'][number]['images']) => {
     return images.find(img => img.is_featured) || images[0] || null;
+  };
+
+  const formatWeight = (weight: number | null | undefined) => {
+    if (weight === null || weight === undefined) {
+      return "-";
+    }
+    return `${weight} gr`;
+  };
+
+  const resolveVariantImage = (image?: Product['variants'][number]['images'][number]) => {
+    if (!image) {
+      return null;
+    }
+
+    if (typeof image.image_url === "string" && image.image_url.length > 0) {
+      return image.image_url;
+    }
+
+    if (typeof image.image === "string" && image.image.length > 0) {
+      return image.image;
+    }
+
+    return null;
   };
 
   return (
@@ -48,9 +69,10 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Gambar</TableHead>
+              <TableHead className="w-20">Gambar</TableHead>
               <TableHead>Kombinasi Opsi</TableHead>
               <TableHead>Harga</TableHead>
+              <TableHead>Berat (gram)</TableHead>
               <TableHead>Stok</TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
@@ -59,14 +81,15 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
             {product.variants.length > 0 ? (
               product.variants.map(variant => {
                 const featuredImage = findFeaturedImage(variant.images);
+                const imageSrc = resolveVariantImage(featuredImage);
                 const variantName = formatOptions(variant.options);
                 return (
                   <TableRow key={variant.id}>
                     <TableCell>
                       <div className="w-16 h-16 relative rounded-md overflow-hidden bg-muted">
-                        {featuredImage ? (
+                        {imageSrc ? (
                           <Image
-                            src={`${featuredImage.image}`}
+                            src={imageSrc}
                             alt="Gambar Varian"
                             fill
                             sizes="4rem"
@@ -85,6 +108,7 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
                         minimumFractionDigits: 0,
                       }).format(variant.price)}
                     </TableCell>
+                    <TableCell>{formatWeight(variant.weight)}</TableCell>
                     <TableCell>{variant.stock ?? 'N/A'}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -111,7 +135,7 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
+                <TableCell colSpan={6} className="h-24 text-center">
                   Belum ada varian untuk produk ini.
                 </TableCell>
               </TableRow>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -31,10 +31,11 @@ export function VariantDetailsForm({ variant }: VariantDetailsFormProps) {
   const router = useRouter();
 
   const form = useForm<UpdateVariantSchema>({
-    resolver: zodResolver(updateVariantSchema) as any,
+    resolver: zodResolver(updateVariantSchema) as Resolver<UpdateVariantSchema>,
     defaultValues: {
       price: variant.price || 0,
       stock: variant.stock || 0,
+      weight: variant.weight ?? null,
     },
   });
 
@@ -58,7 +59,7 @@ export function VariantDetailsForm({ variant }: VariantDetailsFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
             control={form.control}
             name="price"
@@ -80,6 +81,28 @@ export function VariantDetailsForm({ variant }: VariantDetailsFormProps) {
                 <FormLabel>Stok (Opsional)</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="100" {...field} disabled={isPending} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Berat Varian (gram)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min={0}
+                    placeholder="Opsional"
+                    value={field.value ?? ""}
+                    onChange={(event) =>
+                      field.onChange(event.target.value === "" ? null : Number(event.target.value))
+                    }
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -63,6 +63,10 @@ export interface AddOn {
     name: string;
     price: number;
     description: string | null;
+    weight: number | null;
+    pivot?: {
+        weight: number | null;
+    };
 }
 
 export interface Product {
@@ -70,6 +74,7 @@ export interface Product {
     name: string;
     description: string | null;
     base_price: number;
+    weight: number | null;
     min_order_quantity: number;
     is_active: boolean;
     created_at: string;
@@ -110,6 +115,7 @@ export interface ProductVariant {
     product_id: number;
     price: number;
     stock: number;
+    weight: number | null;
     options: AttributeValue[];
     images: ProductVariantImage[];
 }

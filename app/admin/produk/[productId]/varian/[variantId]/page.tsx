@@ -57,7 +57,7 @@ export default function EditVarianPage() {
             <CardHeader>
               <CardTitle>Edit Detail Varian</CardTitle>
               <CardDescription>
-                Perbarui harga dan stok untuk varian <span className="font-semibold">{formatOptions(variant.options)}</span>.
+                Perbarui harga, stok, dan berat untuk varian <span className="font-semibold">{formatOptions(variant.options)}</span>.
               </CardDescription>
             </CardHeader>
             <CardContent>
