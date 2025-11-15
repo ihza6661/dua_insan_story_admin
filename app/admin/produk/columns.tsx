@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Product } from "@/lib/types"
 import { DeleteProductAction } from "./_components/DeleteProductAction";
+import { getImageUrl } from "@/lib/utils";
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
@@ -44,7 +45,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Gambar",
     cell: ({ row }) => {
       const featuredImage = row.original.featured_image;
-      const imageUrl = featuredImage ? `${STORAGE_URL}/${featuredImage.image}` : null;
+      const imageUrl = getImageUrl(featuredImage?.image_url);
 
       return (
         <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">

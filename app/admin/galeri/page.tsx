@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { getGalleryItems } from "@/services/api/gallery.service";
 import { DeleteGalleryItemAction } from "./_components/DeleteGalleryItemAction";
+import { getImageUrl } from "@/lib/utils";
 
 export default function GaleriPage() {
   const { data: galleryItems, isLoading, error } = useQuery({
@@ -58,7 +59,7 @@ export default function GaleriPage() {
                   <div className="relative w-full aspect-square overflow-hidden rounded-t-lg">
                     {item.media_type === 'image' ? (
                       <Image
-                        src={`${item.file_url}`}
+                        src={getImageUrl(item.file_url)}
                         alt={item.title || 'Gallery Item'}
                         fill
                         className="object-cover"

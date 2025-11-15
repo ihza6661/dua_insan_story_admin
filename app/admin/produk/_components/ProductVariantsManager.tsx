@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CreateVariantForm } from "./CreateVariantForm";
 import { DeleteVariantAction } from "./DeleteVariantAction";
+import { getImageUrl } from "@/lib/utils";
 
 interface ProductVariantsManagerProps {
   product: Product;
@@ -42,22 +43,6 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
       return "-";
     }
     return `${weight} gr`;
-  };
-
-  const resolveVariantImage = (image?: Product['variants'][number]['images'][number]) => {
-    if (!image) {
-      return null;
-    }
-
-    if (typeof image.image_url === "string" && image.image_url.length > 0) {
-      return image.image_url;
-    }
-
-    if (typeof image.image === "string" && image.image.length > 0) {
-      return image.image;
-    }
-
-    return null;
   };
 
   return (
@@ -81,7 +66,7 @@ export function ProductVariantsManager({ product }: ProductVariantsManagerProps)
             {product.variants.length > 0 ? (
               product.variants.map(variant => {
                 const featuredImage = findFeaturedImage(variant.images);
-                const imageSrc = resolveVariantImage(featuredImage);
+                const imageSrc = getImageUrl(featuredImage?.image_url);
                 const variantName = formatOptions(variant.options);
                 return (
                   <TableRow key={variant.id}>

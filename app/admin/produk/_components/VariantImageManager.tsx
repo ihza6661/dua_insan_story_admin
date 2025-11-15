@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { getImageUrl } from "@/lib/utils";
 // using native <img> for external/internal URLs to avoid Next.js optimization issues
 
 interface VariantImageManagerProps {
@@ -101,7 +102,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
                   </div>
                 )}
                 <img
-                  src={image.image}
+                  src={getImageUrl(image.image_url)}
                   alt={image.alt_text ?? 'Gambar Varian'}
                   className="w-full h-full object-cover aspect-square"
                 />

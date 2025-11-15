@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { categorySchema, CategorySchema } from "@/lib/schemas";
 import { createProductCategory, updateProductCategory } from "@/services/api/product-category.service";
 import { GenericError, ProductCategory } from "@/lib/types";
+import { getImageUrl } from "@/lib/utils";
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
@@ -43,8 +44,8 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
   const imageFile = form.watch("image");
 
   useEffect(() => {
-    if (isEditMode && initialData?.image) {
-      setImagePreview(`${STORAGE_URL}/${initialData.image}`);
+    if (isEditMode && initialData?.image_url) {
+      setImagePreview(getImageUrl(initialData.image_url));
     }
   }, [initialData, isEditMode]);
 

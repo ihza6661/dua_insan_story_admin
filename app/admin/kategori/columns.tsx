@@ -39,10 +39,10 @@ export const columns: ColumnDef<ProductCategory>[] = [
     },
   },
   {
-    accessorKey: "image",
+    accessorKey: "image_url",
     header: "Gambar",
     cell: ({ row }) => {
-      const imageUrl = getImageUrl(row.getValue("image"));
+      const imageUrl = getImageUrl(row.original.image_url);
 
       return (
         <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">
