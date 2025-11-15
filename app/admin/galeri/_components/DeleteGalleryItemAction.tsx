@@ -20,6 +20,10 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { deleteGalleryItem } from "@/services/api/gallery.service";
 import { GenericError } from "@/lib/types";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteGalleryItemActionProps {
   itemId: number;
   itemTitle: string;
@@ -30,7 +34,7 @@ export function DeleteGalleryItemAction({ itemId, itemTitle }: DeleteGalleryItem
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteGalleryItem,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Item Galeri Berhasil Dihapus", {
         description: response.message,
       });

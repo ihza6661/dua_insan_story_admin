@@ -12,14 +12,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Product } from "@/lib/types"
 import { DeleteProductAction } from "./_components/DeleteProductAction";
 import { getImageUrl } from "@/lib/utils";
-
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
 
 export const columns: ColumnDef<Product>[] = [
   {

@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { ImageIcon, Trash2, UploadCloud, Star } from "lucide-react";
+import Image from "next/image";
 
 import { ProductVariant } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { getImageUrl } from "@/lib/utils";
 // using native <img> for external/internal URLs to avoid Next.js optimization issues
+
+interface ErrorResponse {
+  message: string;
+}
 
 interface VariantImageManagerProps {
   variant: ProductVariant;
@@ -43,7 +48,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
       queryClient.invalidateQueries({ queryKey: ["product", variant.product_id] });
       reset();
     },
-    onError: (error: AxiosError<any>) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.error(error.response?.data?.message || "Gagal mengunggah gambar.");
     },
   });
@@ -55,7 +60,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
       queryClient.invalidateQueries({ queryKey: ["variant", variant.id] });
       queryClient.invalidateQueries({ queryKey: ["product", variant.product_id] });
     },
-    onError: (error: AxiosError<any>) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.error(error.response?.data?.message || "Gagal menghapus gambar.");
     },
   });
@@ -101,10 +106,12 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
                     <Star className="h-4 w-4" />
                   </div>
                 )}
-                <img
+                <Image
                   src={getImageUrl(image.image_url)}
                   alt={image.alt_text ?? 'Gambar Varian'}
-                  className="w-full h-full object-cover aspect-square"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute top-2 right-2">
                   <AlertDialog>

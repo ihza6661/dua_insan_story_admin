@@ -50,7 +50,7 @@ export function GalleryForm({ initialData }: GalleryFormProps) {
   });
 
   const form = useForm<GalleryItemSchema | UpdateGalleryItemSchema>({
-    resolver: zodResolver(isEditMode ? updateGalleryItemSchema : galleryItemSchema) as any,
+    resolver: zodResolver(isEditMode ? updateGalleryItemSchema : galleryItemSchema),
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",

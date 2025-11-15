@@ -35,6 +35,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+interface ErrorResponse {
+  message: string;
+}
+
 interface AttributeValuesManagerProps {
   attribute: Attribute;
 }
@@ -57,7 +61,7 @@ export function AttributeValuesManager({ attribute }: AttributeValuesManagerProp
       invalidateQueries();
       setNewValue("");
     },
-    onError: (error: AxiosError<any>) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.error(error.response?.data?.message || "Gagal menambahkan nilai.");
     },
   });
@@ -70,7 +74,7 @@ export function AttributeValuesManager({ attribute }: AttributeValuesManagerProp
       setEditingValueId(null);
       setEditingText("");
     },
-    onError: (error: AxiosError<any>) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.error(error.response?.data?.message || "Gagal memperbarui nilai.");
     },
   });
@@ -81,7 +85,7 @@ export function AttributeValuesManager({ attribute }: AttributeValuesManagerProp
       toast.success("Nilai berhasil dihapus.");
       invalidateQueries();
     },
-    onError: (error: AxiosError<any>) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.error(error.response?.data?.message || "Gagal menghapus nilai.");
     },
   });

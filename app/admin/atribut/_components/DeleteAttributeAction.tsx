@@ -20,6 +20,10 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { deleteAttribute } from "@/services/api/attribute.service";
 import { GenericError } from "@/lib/types";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteAttributeActionProps {
   attributeId: number;
   attributeName: string;
@@ -30,7 +34,7 @@ export function DeleteAttributeAction({ attributeId, attributeName }: DeleteAttr
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteAttribute,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Atribut Berhasil Dihapus", {
         description: response.message,
       });

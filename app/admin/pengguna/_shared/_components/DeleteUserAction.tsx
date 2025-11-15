@@ -21,6 +21,10 @@ import { deleteAdminUser } from "@/services/api/user.service";
 import { GenericError, User } from "@/lib/types";
 import { useAuthStore } from "@/store/auth.store";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteUserActionProps {
   user: User;
 }
@@ -31,7 +35,7 @@ export function DeleteUserAction({ user }: DeleteUserActionProps) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteAdminUser,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Akun Berhasil Dihapus", {
         description: response.message,
       });

@@ -20,6 +20,10 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { deleteProductVariant } from "@/services/api/product.service";
 import { GenericError } from "@/lib/types";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteVariantActionProps {
   productId: number;
   variantId: number;
@@ -31,7 +35,7 @@ export function DeleteVariantAction({ productId, variantId, variantName }: Delet
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteProductVariant,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Varian Berhasil Dihapus", {
         description: response.message,
       });

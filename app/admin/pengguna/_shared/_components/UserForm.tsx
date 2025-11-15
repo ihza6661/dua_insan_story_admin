@@ -34,7 +34,7 @@ export function UserForm({ initialData, role = 'admin' }: UserFormProps) {
   const isEditMode = !!initialData;
 
   const form = useForm<UserSchema | UpdateUserSchema>({
-    resolver: zodResolver(isEditMode ? updateUserSchema : userSchema) as any,
+    resolver: zodResolver(isEditMode ? updateUserSchema : userSchema),
     defaultValues: {
       full_name: initialData?.full_name || "",
       email: initialData?.email || "",
@@ -66,7 +66,7 @@ export function UserForm({ initialData, role = 'admin' }: UserFormProps) {
 
   const { mutate: updateMutate, isPending: isUpdating } = useMutation({
     mutationFn: updateAdminUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       const userRole = initialData?.role || 'admin';
       const redirectUrl = userRole === 'admin' ? "/admin/pengguna/admin" : "/admin/pengguna/customer";
       toast.success("Akun berhasil diperbarui.");

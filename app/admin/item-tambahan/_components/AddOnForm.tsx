@@ -32,7 +32,7 @@ export function AddOnForm({ initialData }: AddOnFormProps) {
   const isEditMode = !!initialData;
 
   const form = useForm<AddOnSchema>({
-    resolver: zodResolver(addOnSchema) as any,
+    resolver: zodResolver(addOnSchema),
     defaultValues: {
       name: initialData?.name || "",
       price: initialData?.price || 0,

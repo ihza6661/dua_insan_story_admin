@@ -20,6 +20,10 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { deleteAddOn } from "@/services/api/addon.service";
 import { GenericError } from "@/lib/types";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteAddOnActionProps {
   addOnId: number;
   addOnName: string;
@@ -30,7 +34,7 @@ export function DeleteAddOnAction({ addOnId, addOnName }: DeleteAddOnActionProps
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteAddOn,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Item Berhasil Dihapus", {
         description: response.message,
       });

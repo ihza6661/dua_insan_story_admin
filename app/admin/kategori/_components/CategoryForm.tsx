@@ -19,7 +19,9 @@ import { createProductCategory, updateProductCategory } from "@/services/api/pro
 import { GenericError, ProductCategory } from "@/lib/types";
 import { getImageUrl } from "@/lib/utils";
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
+interface SuccessResponse {
+  message: string;
+}
 
 interface CategoryFormProps {
   initialData?: ProductCategory;
@@ -62,7 +64,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
 
   const { mutate: createMutate, isPending: isCreating } = useMutation({
     mutationFn: createProductCategory,
-    onSuccess: (response) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Kategori Dibuat", {
         description: response.message,
       });
@@ -79,7 +81,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
 
   const { mutate: updateMutate, isPending: isUpdating } = useMutation({
     mutationFn: updateProductCategory,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Kategori Diperbarui", { description: response.message });
       queryClient.invalidateQueries({ queryKey: ['product-categories'] });
       queryClient.invalidateQueries({ queryKey: ['product-category', initialData!.id] });

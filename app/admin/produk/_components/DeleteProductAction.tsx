@@ -20,6 +20,10 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { deleteProduct } from "@/services/api/product.service";
 import { GenericError } from "@/lib/types";
 
+interface SuccessResponse {
+  message: string;
+}
+
 interface DeleteProductActionProps {
   productId: number;
   productName: string;
@@ -30,7 +34,7 @@ export function DeleteProductAction({ productId, productName }: DeleteProductAct
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteProduct,
-    onSuccess: (response: any) => {
+    onSuccess: (response: SuccessResponse) => {
       toast.success("Produk Berhasil Dihapus", {
         description: response.message,
       });

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { MoreVertical, PlusCircle, Video } from "lucide-react";
+import { MoreVertical, PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {

@@ -18,8 +18,6 @@ import { DeleteCategoryAction } from "./_components/DeleteCategoryAction";
 
 import { getImageUrl } from "@/lib/utils";
 
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL;
-
 export const columns: ColumnDef<ProductCategory>[] = [
   {
     id: "no",
