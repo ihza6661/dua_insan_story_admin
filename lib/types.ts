@@ -88,7 +88,7 @@ export interface Product {
         name: string;
     };
     add_ons: AddOn[];
-    featured_image: { image: string } | null;
+    featured_image: { image: string; image_url?: string | null } | null;
     variants: ProductVariant[];
 }
 

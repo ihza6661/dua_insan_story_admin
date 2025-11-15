@@ -42,7 +42,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Gambar",
     cell: ({ row }) => {
       const featuredImage = row.original.featured_image;
-      const imageUrl = getImageUrl(featuredImage?.image);
+      const imageUrl = getImageUrl(featuredImage?.image_url);
 
       return (
         <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">
