@@ -14,6 +14,10 @@ export interface LoginSuccessResponse {
     };
 }
 
+export interface SuccessResponse {
+    message: string;
+}
+
 export interface GenericError {
     message: string;
 }

@@ -32,7 +32,8 @@ export function AddOnForm({ initialData }: AddOnFormProps) {
   const isEditMode = !!initialData;
 
   const form = useForm<AddOnSchema>({
-    resolver: zodResolver(addOnSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(addOnSchema) as any,
     defaultValues: {
       name: initialData?.name || "",
       price: initialData?.price || 0,

@@ -1,33 +1,30 @@
-import axios from 'axios';
-import { useAuthStore } from '@/store/auth.store'; 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from "axios";
+import { useAuthStore } from "@/store/auth.store";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1',
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
-        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        "Accept": "application/json",
     },
 });
 
-api.interceptors.request.use(config => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+// Set the initial authorization header if a token exists
+const initialToken = useAuthStore.getState().token;
+if (initialToken) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
+}
 
-// Add a subscription to update the default headers whenever the token changes
-useAuthStore.subscribe(
-    (state) => state.token,
-    (token) => {
+// Subscribe to token changes and update the authorization header
+(useAuthStore.subscribe as any)(
+    (state: any) => state.token,
+    (token: any) => {
         if (token) {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         } else {
             delete api.defaults.headers.common['Authorization'];
         }
-    },
-    {
-        fireImmediately: true, // Ensure it runs immediately on subscription
     }
 );
 
