@@ -48,7 +48,7 @@ export default function LoginPage() {
       
       toast.dismiss();
       toast.success("Login Berhasil", {
-        description: response.data.message,
+        // description: response.data.message,
       });
 
       router.push('/admin');

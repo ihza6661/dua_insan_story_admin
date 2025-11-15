@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const geist = Geist({
   subsets: ['latin'],
@@ -29,7 +30,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryProvider>
-            {children}
+            <AuthProvider>
+              {children}
+            </AuthProvider>
             <Toaster richColors />
           </ReactQueryProvider>
         </ThemeProvider>
