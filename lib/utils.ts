@@ -12,6 +12,7 @@ export const getImageUrl = (path: string | null | undefined): string => {
   if (path.startsWith("http")) {
     return path;
   }
-  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL || "";
-  return `${storageUrl}/${path}`;
+  const storageUrl = (process.env.NEXT_PUBLIC_STORAGE_URL || "").replace(/\/$/, ''); // Remove trailing slash
+  const imagePath = path.replace(/^\//, ''); // Remove leading slash
+  return `${storageUrl}/${imagePath}`;
 };
