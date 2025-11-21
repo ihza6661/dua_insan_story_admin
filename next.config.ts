@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname:
-          "https://dua-insan-story-app-5548c3de441b.herokuapp.com",
+        hostname: "dua-insan-story-app-5548c3de441b.herokuapp.com",
         port: "",
         pathname: "/**",
       },
