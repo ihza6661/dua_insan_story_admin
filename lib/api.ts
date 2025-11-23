@@ -10,21 +10,16 @@ const api = axios.create({
     },
 });
 
-// Set the initial authorization header if a token exists
-const initialToken = useAuthStore.getState().token;
-if (initialToken) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
-}
-
-// Subscribe to token changes and update the authorization header
-(useAuthStore.subscribe as any)(
-    (state: any) => state.token,
-    (token: any) => {
+api.interceptors.request.use(
+    (config) => {
+        const token = useAuthStore.getState().token;
         if (token) {
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        } else {
-            delete api.defaults.headers.common['Authorization'];
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
 );
 
