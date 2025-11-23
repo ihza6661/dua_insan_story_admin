@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { LogOut, PanelLeft } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { useState } from 'react';
 import {
   Avatar,
   AvatarFallback,
@@ -29,6 +30,7 @@ import { ThemeToggler } from './ThemeToggler';
 export function Header() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -44,25 +46,25 @@ export function Header() {
   };
 
   return (
-    <div className="border-b">
+  <div className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="flex h-16 items-center px-4 md:px-8">
         {/* Tombol Sidebar untuk Mobile */}
         <div className="lg:hidden">
-          <Sheet>
+          <Sheet open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Buka menu navigasi">
                 <PanelLeft className="h-5 w-5" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 pt-8 w-72">
-              <Sidebar />
+            <SheetContent side="left" className="w-72 max-w-[320px] p-0 pt-8 sm:w-80">
+              <Sidebar onNavigate={() => setIsMobileNavOpen(false)} />
             </SheetContent>
           </Sheet>
         </div>
 
         {/* Menu User di Kanan */}
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="ml-auto flex items-center gap-2 sm:gap-4">
           <ThemeToggler />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
