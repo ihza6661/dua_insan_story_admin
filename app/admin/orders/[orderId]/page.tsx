@@ -1,47 +1,64 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useParams } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
-import { useOrderDetail } from '@/lib/hooks/useOrders';
-import api from '@/lib/api';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useOrderDetail } from "@/lib/hooks/useOrders";
+import api from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const OrderDetailsPage = () => {
   const params = useParams();
   const orderId = params.orderId as string;
   const queryClient = useQueryClient();
 
-  const { data: orderData, isLoading, isError, error } = useOrderDetail(orderId);
+  const {
+    data: orderData,
+    isLoading,
+    isError,
+    error,
+  } = useOrderDetail(orderId);
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'Pending Payment':
+    // It's safer to convert to lower case to avoid case sensitivity issues
+    const lowerCaseStatus = status ? status.toLowerCase() : "";
+
+    switch (lowerCaseStatus) {
+      case "pending payment":
         return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
-      case 'Partially Paid':
+      case "partially paid":
         return <Badge variant="secondary">DP Lunas</Badge>;
-      case 'Paid':
+      case "paid":
         return <Badge variant="success">Lunas</Badge>;
-      case 'Processing':
+      case "processing":
         return <Badge variant="default">Diproses</Badge>;
-      case 'Design Approval':
+      case "packing":
+        return <Badge variant="default">Dipacking</Badge>;
+      case "design approval":
         return <Badge variant="default">Persetujuan Desain</Badge>;
-      case 'In Production':
+      case "in production":
         return <Badge variant="default">Dalam Produksi</Badge>;
-      case 'Shipped':
+      case "shipped":
         return <Badge variant="default">Dikirim</Badge>;
-      case 'Delivered':
+      case "delivered":
         return <Badge variant="default">Terkirim</Badge>;
-      case 'Completed':
+      case "completed":
         return <Badge variant="success">Selesai</Badge>;
-      case 'Cancelled':
+      case "cancelled":
         return <Badge variant="destructive">Dibatalkan</Badge>;
-      case 'Failed':
+      case "failed":
         return <Badge variant="destructive">Gagal</Badge>;
-      case 'Refunded':
+      case "refunded":
         return <Badge variant="destructive">Dikembalikan</Badge>;
       default:
         return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
@@ -50,13 +67,13 @@ const OrderDetailsPage = () => {
 
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending':
+      case "pending":
         return <Badge variant="secondary">Menunggu</Badge>;
-      case 'partially_paid':
+      case "partially_paid":
         return <Badge variant="default">Dibayar Sebagian</Badge>;
-      case 'paid':
+      case "paid":
         return <Badge variant="success">Lunas</Badge>;
-      case 'cancelled':
+      case "cancelled":
         return <Badge variant="destructive">Dibatalkan</Badge>;
       default:
         return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
@@ -66,9 +83,9 @@ const OrderDetailsPage = () => {
   const updateStatus = async (status: string) => {
     try {
       await api.post(`/admin/orders/${orderId}/status`, { status });
-      await queryClient.invalidateQueries({ queryKey: ['order', orderId] });
+      await queryClient.invalidateQueries({ queryKey: ["order", orderId] });
     } catch (err) {
-      console.error('Failed to update status', err);
+      console.error("Failed to update status", err);
       // Optionally, show an error message to the user
     }
   };
@@ -87,12 +104,15 @@ const OrderDetailsPage = () => {
 
   const amountPaid = Number(orderData.amount_paid ?? 0);
   const remainingBalance = Number(
-    orderData.remaining_balance ?? Math.max(orderData.total_amount - amountPaid, 0)
+    orderData.remaining_balance ??
+      Math.max(orderData.total_amount - amountPaid, 0)
   );
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="mb-6 text-3xl font-bold">Detail Pesanan #{orderData.id}</h1>
+      <h1 className="mb-6 text-3xl font-bold">
+        Detail Pesanan #{orderData.id}
+      </h1>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
@@ -100,12 +120,27 @@ const OrderDetailsPage = () => {
             <CardTitle>Informasi Pesanan</CardTitle>
           </CardHeader>
           <CardContent>
-            <p><strong>ID Order:</strong> {orderData.id}</p>
-            <p><strong>Pelanggan:</strong> {orderData.user_full_name}</p>
-            <p><strong>Status Pesanan:</strong> {getStatusBadge(orderData.order_status)}</p>
+            <p>
+              <strong>ID Order:</strong> {orderData.id}
+            </p>
+            <p>
+              <strong>Pelanggan:</strong> {orderData.user_full_name}
+            </p>
+            <p>
+              <strong>Status Pesanan:</strong>{" "}
+              {getStatusBadge(orderData.order_status)}
+            </p>
             {/* <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p> */}
-            <p><strong>Jumlah Total:</strong> Rp. {typeof orderData.total_amount === 'number' ? orderData.total_amount.toLocaleString('id-ID') : 'N/A'}</p>
-            <p><strong>Tanggal Pesanan:</strong> {new Date(orderData.created_at).toLocaleDateString()}</p>
+            <p>
+              <strong>Jumlah Total:</strong> Rp.{" "}
+              {typeof orderData.total_amount === "number"
+                ? orderData.total_amount.toLocaleString("id-ID")
+                : "N/A"}
+            </p>
+            <p>
+              <strong>Tanggal Pesanan:</strong>{" "}
+              {new Date(orderData.created_at).toLocaleDateString()}
+            </p>
           </CardContent>
         </Card>
 
@@ -115,25 +150,81 @@ const OrderDetailsPage = () => {
               <CardTitle>Detail Pernikahan</CardTitle>
             </CardHeader>
             <CardContent>
-              <p><strong>Mempelai Wanita:</strong> {orderData.invitation_detail.bride_full_name} ({orderData.invitation_detail.bride_nickname})</p>
-              <p><strong>Mempelai Pria:</strong> {orderData.invitation_detail.groom_full_name} ({orderData.invitation_detail.groom_nickname})</p>
-              <p><strong>Orang Tua Mempelai Wanita:</strong> {orderData.invitation_detail.bride_parents}</p>
-              <p><strong>Orang Tua Mempelai Pria:</strong> {orderData.invitation_detail.groom_parents}</p>
-              <p><strong>Tanggal Akad:</strong> {new Date(orderData.invitation_detail.akad_date).toLocaleDateString()}</p>
-              <p><strong>Waktu Akad:</strong> {orderData.invitation_detail.akad_time}</p>
-              <p><strong>Lokasi Akad:</strong> {orderData.invitation_detail.akad_location}</p>
+              <p>
+                <strong>Mempelai Wanita:</strong>{" "}
+                {orderData.invitation_detail.bride_full_name} (
+                {orderData.invitation_detail.bride_nickname})
+              </p>
+              <p>
+                <strong>Mempelai Pria:</strong>{" "}
+                {orderData.invitation_detail.groom_full_name} (
+                {orderData.invitation_detail.groom_nickname})
+              </p>
+              <p>
+                <strong>Orang Tua Mempelai Wanita:</strong>{" "}
+                {orderData.invitation_detail.bride_parents}
+              </p>
+              <p>
+                <strong>Orang Tua Mempelai Pria:</strong>{" "}
+                {orderData.invitation_detail.groom_parents}
+              </p>
+              <p>
+                <strong>Tanggal Akad:</strong>{" "}
+                {new Date(
+                  orderData.invitation_detail.akad_date
+                ).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Waktu Akad:</strong>{" "}
+                {orderData.invitation_detail.akad_time}
+              </p>
+              <p>
+                <strong>Lokasi Akad:</strong>{" "}
+                {orderData.invitation_detail.akad_location}
+              </p>
               {orderData.invitation_detail.reception_date && (
                 <>
-                  <p><strong>Tanggal Resepsi:</strong> {new Date(orderData.invitation_detail.reception_date).toLocaleDateString()}</p>
-                  <p><strong>Waktu Resepsi:</strong> {orderData.invitation_detail.reception_time}</p>
-                  <p><strong>Lokasi Resepsi:</strong> {orderData.invitation_detail.reception_location}</p>
+                  <p>
+                    <strong>Tanggal Resepsi:</strong>{" "}
+                    {new Date(
+                      orderData.invitation_detail.reception_date
+                    ).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>Waktu Resepsi:</strong>{" "}
+                    {orderData.invitation_detail.reception_time}
+                  </p>
+                  <p>
+                    <strong>Lokasi Resepsi:</strong>{" "}
+                    {orderData.invitation_detail.reception_location}
+                  </p>
                 </>
               )}
               {orderData.invitation_detail.gmaps_link && (
-                <p><strong>Google Maps:</strong> <a href={orderData.invitation_detail.gmaps_link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Tautan</a></p>
+                <p>
+                  <strong>Google Maps:</strong>{" "}
+                  <a
+                    href={orderData.invitation_detail.gmaps_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-red-500 hover:underline"
+                  >
+                    Tautan
+                  </a>
+                </p>
               )}
               {orderData.invitation_detail.prewedding_photo && (
-                <p><strong>Foto Prewedding:</strong> <a href={orderData.invitation_detail.prewedding_photo} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat Foto</a></p>
+                <p>
+                  <strong>Foto Prewedding:</strong>{" "}
+                  <a
+                    href={orderData.invitation_detail.prewedding_photo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-red-500 hover:underline"
+                  >
+                    Lihat Foto
+                  </a>
+                </p>
               )}
             </CardContent>
           </Card>
@@ -153,9 +244,18 @@ const OrderDetailsPage = () => {
             <CardTitle>Ringkasan Pembayaran</CardTitle>
           </CardHeader>
           <CardContent>
-            <p><strong>Status Pembayaran:</strong> {getPaymentStatusBadge(orderData.payment_status)}</p>
-            <p><strong>Jumlah Dibayar:</strong> Rp. {amountPaid.toLocaleString('id-ID')}</p>
-            <p><strong>Sisa Tagihan:</strong> Rp. {remainingBalance.toLocaleString('id-ID')}</p>
+            <p>
+              <strong>Status Pembayaran:</strong>{" "}
+              {getPaymentStatusBadge(orderData.payment_status)}
+            </p>
+            <p>
+              <strong>Jumlah Dibayar:</strong> Rp.{" "}
+              {amountPaid.toLocaleString("id-ID")}
+            </p>
+            <p>
+              <strong>Sisa Tagihan:</strong> Rp.{" "}
+              {remainingBalance.toLocaleString("id-ID")}
+            </p>
           </CardContent>
         </Card>
 
@@ -164,18 +264,30 @@ const OrderDetailsPage = () => {
             <CardTitle>Perbarui Status</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            {orderData.order_status === 'processing' && (
-              <Button onClick={() => updateStatus('packing')}>Tandai sebagai Packing</Button>
+            {orderData.order_status === "processing" && (
+              <Button onClick={() => updateStatus("packing")}>
+                Tandai sebagai Packing
+              </Button>
             )}
-            {orderData.order_status === 'packing' && (
-              <Button onClick={() => updateStatus('shipped')}>Tandai sebagai Dikirim</Button>
+            {orderData.order_status === "packing" && (
+              <Button onClick={() => updateStatus("shipped")}>
+                Tandai sebagai Dikirim
+              </Button>
             )}
-            {orderData.order_status === 'shipped' && (
-              <Button onClick={() => updateStatus('completed')}>Tandai sebagai Selesai</Button>
+            {orderData.order_status === "shipped" && (
+              <Button onClick={() => updateStatus("completed")}>
+                Tandai sebagai Selesai
+              </Button>
             )}
-            {(orderData.order_status !== 'completed' && orderData.order_status !== 'cancelled') && (
-              <Button variant="destructive" onClick={() => updateStatus('cancelled')}>Batalkan Pesanan</Button>
-            )}
+            {orderData.order_status !== "completed" &&
+              orderData.order_status !== "cancelled" && (
+                <Button
+                  variant="destructive"
+                  onClick={() => updateStatus("cancelled")}
+                >
+                  Batalkan Pesanan
+                </Button>
+              )}
           </CardContent>
         </Card>
       </div>
@@ -184,28 +296,40 @@ const OrderDetailsPage = () => {
         <CardHeader>
           <CardTitle>Item yang Di Pesan</CardTitle>
         </CardHeader>
-        <CardContent>
+
+        {/* FIX: Pastikan container tabel bisa scroll */}
+        <CardContent className="overflow-x-auto">
           {orderData.order_items && orderData.order_items.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Produk</TableHead>
-                  <TableHead>Jumlah</TableHead>
-                  <TableHead>Haraga</TableHead>
-                  <TableHead>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orderData.order_items.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.product_name}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>Rp. {item.price.toLocaleString('id-ID')}</TableCell>
-                    <TableCell>Rp. {item.subtotal.toLocaleString('id-ID')}</TableCell>
+            <div className="w-full">
+              <Table className="w-full table-fixed">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-1/3">Produk</TableHead>
+                    <TableHead>Jumlah</TableHead>
+                    <TableHead>Harga</TableHead>
+                    <TableHead>Total</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+
+                <TableBody>
+                  {orderData.order_items.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell className="">{item.product_name}</TableCell>
+
+                      <TableCell>{item.quantity}</TableCell>
+
+                      <TableCell className="text-xs">
+                        Rp. {item.price.toLocaleString("id-ID")}
+                      </TableCell>
+
+                      <TableCell className="text-xs">
+                        Rp. {item.subtotal.toLocaleString("id-ID")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <p>Tidak ada item di pesanan ini.</p>
           )}
@@ -218,22 +342,30 @@ const OrderDetailsPage = () => {
         </CardHeader>
         <CardContent>
           {orderData.payments && orderData.payments.length > 0 ? (
-            <Table>
+            <Table className="w-full table-fixed">
               <TableHeader>
                 <TableRow>
                   <TableHead>Tanggal</TableHead>
                   <TableHead>Jumlah</TableHead>
-                  <TableHead>Metode</TableHead>
+                  <TableHead className="w-1/2">Metode</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orderData.payments.map((payment) => (
                   <TableRow key={payment.id}>
-                    <TableCell>{new Date(payment.payment_date).toLocaleDateString()}</TableCell>
-                    <TableCell>Rp. {payment.amount.toLocaleString('id-ID')}</TableCell>
-                    <TableCell>{payment.payment_method}</TableCell>
-                    <TableCell>{getPaymentStatusBadge(payment.status)}</TableCell>
+                    <TableCell>
+                      {new Date(payment.payment_date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      Rp. {payment.amount.toLocaleString("id-ID")}
+                    </TableCell>
+                    <TableCell className="break-words">
+                      {payment.payment_method}
+                    </TableCell>
+                    <TableCell>
+                      {getPaymentStatusBadge(payment.status)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
