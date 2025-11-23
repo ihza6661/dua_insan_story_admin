@@ -21,6 +21,7 @@ import { getImageUrl } from "@/lib/utils";
 export const columns: ColumnDef<ProductCategory>[] = [
   {
     id: "no",
+    meta: { cardLabel: "No." },
     header: ({ column }) => {
       return (
         <Button
@@ -61,6 +62,7 @@ export const columns: ColumnDef<ProductCategory>[] = [
   },
   {
     accessorKey: "name",
+    meta: { cardLabel: "Nama Kategori" },
     header: ({ column }) => {
       return (
         <Button
@@ -83,6 +85,7 @@ export const columns: ColumnDef<ProductCategory>[] = [
   },
   {
     accessorKey: "created_at",
+    meta: { cardLabel: "Tanggal Dibuat" },
     header: ({ column }) => {
       return (
         <Button
@@ -106,6 +109,7 @@ export const columns: ColumnDef<ProductCategory>[] = [
   },
   {
     id: "actions",
+    meta: { cardLabel: "Aksi" },
     header: () => <div className="text-right">Aksi</div>,
     cell: ({ row }) => {
       const category = row.original;

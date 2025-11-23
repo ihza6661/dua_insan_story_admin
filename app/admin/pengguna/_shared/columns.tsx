@@ -18,6 +18,7 @@ import { DeleteUserAction } from "./_components/DeleteUserAction";
 export const columns: ColumnDef<User>[] = [
   {
     id: "rowNumber",
+    meta: { cardLabel: "No." },
     header: ({ column }) => {
       return (
         <Button
@@ -36,6 +37,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "full_name",
+    meta: { cardLabel: "Nama Lengkap" },
     header: ({ column }) => {
       return (
         <Button
@@ -53,6 +55,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
+    meta: { cardLabel: "Email" },
     header: ({ column }) => {
       return (
         <Button
@@ -74,6 +77,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     id: "actions",
+    meta: { cardLabel: "Aksi" },
     header: () => <div className="text-right">Aksi</div>,
     cell: ({ row }) => {
       const user = row.original;

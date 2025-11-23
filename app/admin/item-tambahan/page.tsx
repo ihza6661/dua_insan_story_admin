@@ -25,7 +25,7 @@ export default function ItemTambahanPage() {
         </div>
         <Link href="/admin/item-tambahan/tambah">
           <Button className="cursor-pointer">
-            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Item
+            <PlusCircle className="my-2 h-4 w-4" /> Tambah Item
           </Button>
         </Link>
       </div>

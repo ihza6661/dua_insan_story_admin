@@ -18,6 +18,7 @@ import { DeleteAddOnAction } from "./_components/DeleteAddOnAction";
 export const columns: ColumnDef<AddOn>[] = [
   {
     id: "rowNumber",
+    meta: { cardLabel: "No." },
     header: ({ column }) => {
       return (
         <Button
@@ -36,6 +37,7 @@ export const columns: ColumnDef<AddOn>[] = [
   },
   {
     accessorKey: "name",
+    meta: { cardLabel: "Nama Item" },
     header: ({ column }) => {
       return (
         <Button
@@ -53,6 +55,7 @@ export const columns: ColumnDef<AddOn>[] = [
   },
   {
     accessorKey: "price",
+    meta: { cardLabel: "Harga" },
     header: ({ column }) => {
       return (
         <Button
@@ -77,6 +80,7 @@ export const columns: ColumnDef<AddOn>[] = [
   },
   {
     id: "actions",
+    meta: { cardLabel: "Aksi" },
     header: () => <div className="text-right">Aksi</div>,
     cell: ({ row }) => {
       const addOn = row.original;

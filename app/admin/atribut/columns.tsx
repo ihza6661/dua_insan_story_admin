@@ -19,6 +19,7 @@ import { DeleteAttributeAction } from "./_components/DeleteAttributeAction";
 export const columns: ColumnDef<Attribute>[] = [
   {
     id: "rowNumber",
+    meta: { cardLabel: "No." },
     header: ({ column }) => {
       return (
         <Button
@@ -37,6 +38,7 @@ export const columns: ColumnDef<Attribute>[] = [
   },
   {
     accessorKey: "name",
+    meta: { cardLabel: "Nama Atribut" },
     header: ({ column }) => {
       return (
         <Button
@@ -71,6 +73,7 @@ export const columns: ColumnDef<Attribute>[] = [
   },
   {
     id: "actions",
+    meta: { cardLabel: "Aksi" },
     header: () => <div className="text-right">Aksi</div>,
     cell: ({ row }) => {
       const attribute = row.original;

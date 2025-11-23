@@ -42,7 +42,7 @@ export default function GaleriPage() {
         </div>
         <Link href="/admin/galeri/tambah">
           <Button className="cursor-pointer">
-            <PlusCircle className="mr-2 h-4 w-4" /> Unggah Item
+            <PlusCircle className="mr-2 h-4 w-4" /> Unggah Gambar
           </Button>
         </Link>
       </div>

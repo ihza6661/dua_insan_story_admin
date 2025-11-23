@@ -1,41 +1,24 @@
-"use client";
-
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/shared/Sidebar';
 import { Header } from '@/components/shared/Header';
-import { useAuthStore } from '@/store/auth.store';
+
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const { isAuthenticated, initialize } = useAuthStore();
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    initialize();
-    setIsInitialized(true);
-  }, [initialize]);
-
-  useEffect(() => {
-    if (isInitialized && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [isInitialized, isAuthenticated, router]);
-
-  if (!isInitialized || !isAuthenticated) {
-    return null;
-  }
-
   return (
-    <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-      <Sidebar className="hidden border-r bg-muted/40 lg:block" />
-      <div className="flex flex-col">
+    <div className="flex min-h-screen w-full bg-muted/10">
+      <Sidebar className="hidden lg:flex lg:w-[260px] xl:w-[300px]" />
+      <div className="flex flex-1 flex-col">
         <Header />
-        <main className="flex-1 p-4 md:p-8">{children}</main>
+        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );

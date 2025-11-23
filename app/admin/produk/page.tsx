@@ -22,7 +22,7 @@ export default function ProdukPage() {
         </div>
         <Link href="/admin/produk/tambah">
           <Button className="cursor-pointer">
-            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Produk
+            <PlusCircle className="my-2 h-4 w-4" /> Tambah Produk
           </Button>
         </Link>
       </div>
