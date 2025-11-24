@@ -14,8 +14,8 @@ const navItems = [
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
   { href: '/admin/orders', icon: ShoppingBag, label: 'Pesanan' },
   { href: '/admin/galeri', icon: GalleryHorizontal, label: 'Galeri' },
-  { href: '/admin/pengguna/admin', icon: Users, label: 'Pengguna Admin' },
-  { href: '/admin/pengguna/customer', icon: Users, label: 'Pengguna Customer' },
+  { href: '/admin/pengguna/admin', icon: Users, label: 'Kelola Admin' },
+  { href: '/admin/pengguna/customer', icon: Users, label: 'Kelola Pelanggan' },
 ];
 
 type SidebarProps = {
