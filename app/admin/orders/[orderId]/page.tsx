@@ -214,17 +214,22 @@ const OrderDetailsPage = () => {
                 </p>
               )}
               {orderData.invitation_detail.prewedding_photo && (
-                <p>
-                  <strong>Foto Prewedding:</strong>{" "}
-                  <a
-                    href={orderData.invitation_detail.prewedding_photo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-red-500 hover:underline"
-                  >
-                    Lihat Foto
-                  </a>
-                </p>
+                <div className="mt-4">
+                  <strong>Foto Prewedding:</strong>
+                  <div className="mt-2 rounded-lg border p-2">
+                    <a
+                      href={orderData.invitation_detail.prewedding_photo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={orderData.invitation_detail.prewedding_photo}
+                        alt="Foto Prewedding"
+                        className="h-auto w-full max-w-xs rounded-md object-contain"
+                      />
+                    </a>
+                  </div>
+                </div>
               )}
             </CardContent>
           </Card>
