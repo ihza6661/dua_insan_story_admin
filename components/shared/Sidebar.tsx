@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal } from 'lucide-react';
+import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/admin/galeri', icon: GalleryHorizontal, label: 'Galeri' },
   { href: '/admin/pengguna/admin', icon: Users, label: 'Kelola Admin' },
   { href: '/admin/pengguna/customer', icon: Users, label: 'Kelola Pelanggan' },
+  { href: '/admin/settings', icon: Settings, label: 'Pengaturan' },
 ];
 
 type SidebarProps = {

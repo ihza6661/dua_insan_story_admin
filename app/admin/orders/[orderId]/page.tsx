@@ -269,6 +269,16 @@ const OrderDetailsPage = () => {
             <CardTitle>Perbarui Status</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
+            {(orderData.order_status === "pending_payment" || orderData.order_status === "Pending Payment") && (
+              <Button onClick={() => updateStatus("paid")}>
+                Konfirmasi Pembayaran (Manual)
+              </Button>
+            )}
+            {(orderData.order_status === "paid" || orderData.order_status === "Paid") && (
+              <Button onClick={() => updateStatus("processing")}>
+                Proses Pesanan
+              </Button>
+            )}
             {orderData.order_status === "processing" && (
               <Button onClick={() => updateStatus("packing")}>
                 Tandai sebagai Packing
