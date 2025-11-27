@@ -162,6 +162,10 @@ export interface Order {
     remaining_balance: number;
     created_at: string;
     shipping_address: string;
+    shipping_method?: string;
+    shipping_cost?: number;
+    shipping_service?: string;
+    courier?: string;
     billing_address: string;
     order_items: OrderItem[];
     invitation_detail?: InvitationDetail;

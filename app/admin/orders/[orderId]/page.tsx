@@ -105,7 +105,7 @@ const OrderDetailsPage = () => {
   const amountPaid = Number(orderData.amount_paid ?? 0);
   const remainingBalance = Number(
     orderData.remaining_balance ??
-      Math.max(orderData.total_amount - amountPaid, 0)
+      Math.max(orderData.total_amount - amountPaid, 0),
   );
 
   return (
@@ -171,7 +171,7 @@ const OrderDetailsPage = () => {
               <p>
                 <strong>Tanggal Akad:</strong>{" "}
                 {new Date(
-                  orderData.invitation_detail.akad_date
+                  orderData.invitation_detail.akad_date,
                 ).toLocaleDateString()}
               </p>
               <p>
@@ -187,7 +187,7 @@ const OrderDetailsPage = () => {
                   <p>
                     <strong>Tanggal Resepsi:</strong>{" "}
                     {new Date(
-                      orderData.invitation_detail.reception_date
+                      orderData.invitation_detail.reception_date,
                     ).toLocaleDateString()}
                   </p>
                   <p>
@@ -225,7 +225,7 @@ const OrderDetailsPage = () => {
                       <img
                         src={orderData.invitation_detail.prewedding_photo}
                         alt="Foto Prewedding"
-                        className="h-auto w-full max-w-xs rounded-md object-contain"
+                        className="h-auto w-full max-w-sm rounded-md object-contain"
                       />
                     </a>
                   </div>
@@ -237,10 +237,50 @@ const OrderDetailsPage = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Alamat Pengiriman</CardTitle>
+            <CardTitle>Informasi Pengiriman</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>{orderData.shipping_address}</p>
+          <CardContent className="space-y-2">
+            <div>
+              <p className="font-semibold text-sm text-muted-foreground">
+                Alamat
+              </p>
+              <p>{orderData.shipping_address}</p>
+            </div>
+            {orderData.shipping_method && (
+              <div>
+                <p className="font-semibold text-sm text-muted-foreground">
+                  Metode Pengiriman
+                </p>
+                <p className="capitalize">
+                  {orderData.shipping_method === "rajaongkir"
+                    ? "Ekspedisi"
+                    : orderData.shipping_method === "pickup"
+                      ? "Ambil Sendiri"
+                      : "GoSend (Manual)"}
+                </p>
+              </div>
+            )}
+            {orderData.courier && (
+              <div>
+                <p className="font-semibold text-sm text-muted-foreground">
+                  Kurir
+                </p>
+                <p className="uppercase">
+                  {orderData.courier}{" "}
+                  {orderData.shipping_service
+                    ? `- ${orderData.shipping_service}`
+                    : ""}
+                </p>
+              </div>
+            )}
+            {typeof orderData.shipping_cost === "number" && (
+              <div>
+                <p className="font-semibold text-sm text-muted-foreground">
+                  Biaya Ongkir
+                </p>
+                <p>Rp. {orderData.shipping_cost.toLocaleString("id-ID")}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -269,12 +309,14 @@ const OrderDetailsPage = () => {
             <CardTitle>Perbarui Status</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            {(orderData.order_status === "pending_payment" || orderData.order_status === "Pending Payment") && (
+            {(orderData.order_status === "pending_payment" ||
+              orderData.order_status === "Pending Payment") && (
               <Button onClick={() => updateStatus("paid")}>
                 Konfirmasi Pembayaran (Manual)
               </Button>
             )}
-            {(orderData.order_status === "paid" || orderData.order_status === "Paid") && (
+            {(orderData.order_status === "paid" ||
+              orderData.order_status === "Paid") && (
               <Button onClick={() => updateStatus("processing")}>
                 Proses Pesanan
               </Button>
@@ -312,7 +354,6 @@ const OrderDetailsPage = () => {
           <CardTitle>Item yang Di Pesan</CardTitle>
         </CardHeader>
 
-        {/* FIX: Pastikan container tabel bisa scroll */}
         <CardContent className="overflow-x-auto">
           {orderData.order_items && orderData.order_items.length > 0 ? (
             <div className="w-full">
@@ -355,39 +396,50 @@ const OrderDetailsPage = () => {
         <CardHeader>
           <CardTitle>Riwayat Pembayaran</CardTitle>
         </CardHeader>
-        <CardContent>
-          {orderData.payments && orderData.payments.length > 0 ? (
-            <Table className="w-full table-fixed">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Tanggal</TableHead>
-                  <TableHead>Jumlah</TableHead>
-                  <TableHead className="w-1/2">Metode</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orderData.payments.map((payment) => (
-                  <TableRow key={payment.id}>
-                    <TableCell>
-                      {new Date(payment.payment_date).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      Rp. {payment.amount.toLocaleString("id-ID")}
-                    </TableCell>
-                    <TableCell className="break-words">
-                      {payment.payment_method}
-                    </TableCell>
-                    <TableCell>
-                      {getPaymentStatusBadge(payment.status)}
-                    </TableCell>
+
+        {/* Prevent page from horizontal scrolling */}
+        <CardContent className="overflow-hidden">
+          {/* Table scrolls horizontally */}
+          <div className="w-full overflow-x-auto">
+            {orderData.payments && orderData.payments.length > 0 ? (
+              <Table className="min-w-[400px] w-full">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[140px]">Tanggal</TableHead>
+                    <TableHead className="w-[120px]">Jumlah</TableHead>
+                    <TableHead className="w-[200px]">Metode</TableHead>
+                    <TableHead>Status</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p>Tidak ada riwayat pembayaran untuk pesanan ini.</p>
-          )}
+                </TableHeader>
+
+                <TableBody>
+                  {orderData.payments.map((payment) => (
+                    <TableRow key={payment.id}>
+                      <TableCell className="text-xs">
+                        {new Date(payment.payment_date).toLocaleDateString()}
+                      </TableCell>
+
+                      <TableCell className="text-xs">
+                        Rp. {payment.amount.toLocaleString("id-ID")}
+                      </TableCell>
+
+                      <TableCell className="text-xs whitespace-normal break-words">
+                        {payment.payment_method}
+                      </TableCell>
+
+                      <TableCell className="text-xs">
+                        {getPaymentStatusBadge(payment.status)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <p className="text-sm">
+                Tidak ada riwayat pembayaran untuk pesanan ini.
+              </p>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>
