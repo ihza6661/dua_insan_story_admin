@@ -17,6 +17,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DesignProofSection } from "@/components/orders/DesignProofSection";
+import {
+  ORDER_STATUS,
+  getOrderStatusLabel,
+  getOrderStatusVariant,
+} from "@/lib/constants/orderStatus";
 
 const OrderDetailsPage = () => {
   const params = useParams();
@@ -31,39 +36,9 @@ const OrderDetailsPage = () => {
   } = useOrderDetail(orderId);
 
   const getStatusBadge = (status: string) => {
-    // It's safer to convert to lower case to avoid case sensitivity issues
-    const lowerCaseStatus = status ? status.toLowerCase() : "";
-
-    switch (lowerCaseStatus) {
-      case "pending payment":
-        return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
-      case "partially paid":
-        return <Badge variant="secondary">DP Lunas</Badge>;
-      case "paid":
-        return <Badge variant="success">Lunas</Badge>;
-      case "processing":
-        return <Badge variant="default">Diproses</Badge>;
-      case "packing":
-        return <Badge variant="default">Dipacking</Badge>;
-      case "design approval":
-        return <Badge variant="default">Persetujuan Desain</Badge>;
-      case "in production":
-        return <Badge variant="default">Dalam Produksi</Badge>;
-      case "shipped":
-        return <Badge variant="default">Dikirim</Badge>;
-      case "delivered":
-        return <Badge variant="default">Terkirim</Badge>;
-      case "completed":
-        return <Badge variant="success">Selesai</Badge>;
-      case "cancelled":
-        return <Badge variant="destructive">Dibatalkan</Badge>;
-      case "failed":
-        return <Badge variant="destructive">Gagal</Badge>;
-      case "refunded":
-        return <Badge variant="destructive">Dikembalikan</Badge>;
-      default:
-        return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
-    }
+    const variant = getOrderStatusVariant(status);
+    const label = getOrderStatusLabel(status);
+    return <Badge variant={variant}>{label}</Badge>;
   };
 
   const getPaymentStatusBadge = (status: string) => {
@@ -310,38 +285,41 @@ const OrderDetailsPage = () => {
             <CardTitle>Perbarui Status</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            {(orderData.order_status === "pending_payment" ||
-              orderData.order_status === "Pending Payment") && (
-              <Button onClick={() => updateStatus("paid")}>
+            {orderData.order_status === ORDER_STATUS.PENDING_PAYMENT && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.PAID)}>
                 Konfirmasi Pembayaran (Manual)
               </Button>
             )}
-            {(orderData.order_status === "paid" ||
-              orderData.order_status === "Paid") && (
-              <Button onClick={() => updateStatus("processing")}>
+            {orderData.order_status === ORDER_STATUS.PAID && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.PROCESSING)}>
                 Proses Pesanan
               </Button>
             )}
-            {orderData.order_status === "processing" && (
-              <Button onClick={() => updateStatus("packing")}>
-                Tandai sebagai Packing
+            {orderData.order_status === ORDER_STATUS.PROCESSING && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.IN_PRODUCTION)}>
+                Tandai sebagai Produksi
               </Button>
             )}
-            {orderData.order_status === "packing" && (
-              <Button onClick={() => updateStatus("shipped")}>
+            {orderData.order_status === ORDER_STATUS.IN_PRODUCTION && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.SHIPPED)}>
                 Tandai sebagai Dikirim
               </Button>
             )}
-            {orderData.order_status === "shipped" && (
-              <Button onClick={() => updateStatus("completed")}>
+            {orderData.order_status === ORDER_STATUS.SHIPPED && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}>
+                Tandai sebagai Terkirim
+              </Button>
+            )}
+            {orderData.order_status === ORDER_STATUS.DELIVERED && (
+              <Button onClick={() => updateStatus(ORDER_STATUS.COMPLETED)}>
                 Tandai sebagai Selesai
               </Button>
             )}
-            {orderData.order_status !== "completed" &&
-              orderData.order_status !== "cancelled" && (
+            {orderData.order_status !== ORDER_STATUS.COMPLETED &&
+              orderData.order_status !== ORDER_STATUS.CANCELLED && (
                 <Button
                   variant="destructive"
-                  onClick={() => updateStatus("cancelled")}
+                  onClick={() => updateStatus(ORDER_STATUS.CANCELLED)}
                 >
                   Batalkan Pesanan
                 </Button>

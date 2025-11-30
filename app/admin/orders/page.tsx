@@ -6,6 +6,7 @@ import { useOrders } from '@/lib/hooks/useOrders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { getOrderStatusLabel, getOrderStatusVariant } from '@/lib/constants/orderStatus';
 
 const formatCurrency = (amount: unknown) => {
   const numericValue = Number(amount);
@@ -40,39 +41,9 @@ const OrdersPage = () => {
   const router = useRouter();
 
   const getStatusBadge = (status: string) => {
-    // It's safer to convert to lower case to avoid case sensitivity issues
-    const lowerCaseStatus = status ? status.toLowerCase() : '';
-
-    switch (lowerCaseStatus) {
-      case 'pending payment':
-        return <Badge variant="secondary">Menunggu Pembayaran</Badge>;
-      case 'partially paid':
-        return <Badge variant="secondary">DP Lunas</Badge>;
-      case 'paid':
-        return <Badge variant="success">Lunas</Badge>;
-      case 'processing':
-        return <Badge variant="default">Diproses</Badge>;
-      case 'packing':
-        return <Badge variant="default">Dipacking</Badge>;
-      case 'design approval':
-        return <Badge variant="default">Persetujuan Desain</Badge>;
-      case 'in production':
-        return <Badge variant="default">Dalam Produksi</Badge>;
-      case 'shipped':
-        return <Badge variant="default">Dikirim</Badge>;
-      case 'delivered':
-        return <Badge variant="default">Terkirim</Badge>;
-      case 'completed':
-        return <Badge variant="success">Selesai</Badge>;
-      case 'cancelled':
-        return <Badge variant="destructive">Dibatalkan</Badge>;
-      case 'failed':
-        return <Badge variant="destructive">Gagal</Badge>;
-      case 'refunded':
-        return <Badge variant="destructive">Dikembalikan</Badge>;
-      default:
-        return <Badge variant="destructive">Status Tidak Diketahui</Badge>;
-    }
+    const variant = getOrderStatusVariant(status);
+    const label = getOrderStatusLabel(status);
+    return <Badge variant={variant}>{label}</Badge>;
   };
 
   const getPaymentStatusBadge = (status: string) => {

@@ -150,8 +150,22 @@ export interface InvitationDetail {
     prewedding_photo: string | null;
 }
 
+export type OrderStatus = 
+    | 'Pending Payment'
+    | 'Partially Paid'
+    | 'Paid'
+    | 'Processing'
+    | 'Design Approval'
+    | 'In Production'
+    | 'Shipped'
+    | 'Delivered'
+    | 'Completed'
+    | 'Cancelled'
+    | 'Failed'
+    | 'Refunded';
+
 export interface Order {
-    order_status: string;
+    order_status: OrderStatus;
     id: number;
     user_id: number;
     user_full_name: string;
