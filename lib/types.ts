@@ -179,3 +179,27 @@ export interface OrderPayment {
     payment_method: string;
     status: string;
 }
+
+export interface DesignProof {
+    id: number;
+    order_item_id: number;
+    uploaded_by: number;
+    version: number;
+    file_url: string;
+    file_name: string | null;
+    file_type: string | null;
+    file_size: number | null;
+    thumbnail_url: string | null;
+    status: 'pending_approval' | 'approved' | 'revision_requested' | 'rejected';
+    reviewed_at: string | null;
+    reviewed_by: number | null;
+    customer_feedback: string | null;
+    admin_notes: string | null;
+    customer_notified: boolean;
+    customer_notified_at: string | null;
+    created_at: string;
+    updated_at: string;
+    uploaded_by_user?: User;
+    reviewed_by_user?: User;
+    order_item?: OrderItem;
+}

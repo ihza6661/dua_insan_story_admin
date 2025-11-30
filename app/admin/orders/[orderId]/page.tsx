@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DesignProofSection } from "@/components/orders/DesignProofSection";
 
 const OrderDetailsPage = () => {
   const params = useParams();
@@ -442,6 +443,12 @@ const OrderDetailsPage = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Design Proof Section */}
+      <DesignProofSection 
+        orderId={orderData.id} 
+        orderItems={orderData.order_items} 
+      />
     </div>
   );
 };
