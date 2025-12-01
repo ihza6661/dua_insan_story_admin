@@ -285,45 +285,68 @@ const OrderDetailsPage = () => {
             <CardTitle>Perbarui Status</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
-            {orderData.order_status === ORDER_STATUS.PENDING_PAYMENT && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.PAID)}>
-                Konfirmasi Pembayaran (Manual)
-              </Button>
-            )}
-            {orderData.order_status === ORDER_STATUS.PAID && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.PROCESSING)}>
-                Proses Pesanan
-              </Button>
-            )}
-            {orderData.order_status === ORDER_STATUS.PROCESSING && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.IN_PRODUCTION)}>
-                Tandai sebagai Produksi
-              </Button>
-            )}
-            {orderData.order_status === ORDER_STATUS.IN_PRODUCTION && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.SHIPPED)}>
-                Tandai sebagai Dikirim
-              </Button>
-            )}
-            {orderData.order_status === ORDER_STATUS.SHIPPED && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}>
-                Tandai sebagai Terkirim
-              </Button>
-            )}
-            {orderData.order_status === ORDER_STATUS.DELIVERED && (
-              <Button onClick={() => updateStatus(ORDER_STATUS.COMPLETED)}>
-                Tandai sebagai Selesai
-              </Button>
-            )}
-            {orderData.order_status !== ORDER_STATUS.COMPLETED &&
-              orderData.order_status !== ORDER_STATUS.CANCELLED && (
+            {orderData.order_status === ORDER_STATUS.COMPLETED ? (
+              <div className="flex items-center justify-center bg-card rounded-lg border p-4">
+                <div className="text-center">
+                  <Badge variant="success" className="mb-2">
+                    {getOrderStatusLabel(ORDER_STATUS.COMPLETED)}
+                  </Badge>
+                  <p className="text-foreground text-sm">
+                    Pesanan telah selesai. Tidak ada tindakan lebih lanjut yang diperlukan.
+                  </p>
+                </div>
+              </div>
+            ) : orderData.order_status === ORDER_STATUS.CANCELLED ? (
+              <div className="flex items-center justify-center rounded-lg border border-red-200 bg-red-50 p-4">
+                <div className="text-center">
+                  <Badge variant="destructive" className="mb-2">
+                    {getOrderStatusLabel(ORDER_STATUS.CANCELLED)}
+                  </Badge>
+                  <p className="text-foreground text-sm">
+                    Pesanan telah dibatalkan.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {orderData.order_status === ORDER_STATUS.PENDING_PAYMENT && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.PAID)}>
+                    Konfirmasi Pembayaran (Manual)
+                  </Button>
+                )}
+                {orderData.order_status === ORDER_STATUS.PAID && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.PROCESSING)}>
+                    Proses Pesanan
+                  </Button>
+                )}
+                {orderData.order_status === ORDER_STATUS.PROCESSING && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.IN_PRODUCTION)}>
+                    Tandai sebagai Produksi
+                  </Button>
+                )}
+                {orderData.order_status === ORDER_STATUS.IN_PRODUCTION && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.SHIPPED)}>
+                    Tandai sebagai Dikirim
+                  </Button>
+                )}
+                {orderData.order_status === ORDER_STATUS.SHIPPED && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}>
+                    Tandai sebagai Terkirim
+                  </Button>
+                )}
+                {orderData.order_status === ORDER_STATUS.DELIVERED && (
+                  <Button onClick={() => updateStatus(ORDER_STATUS.COMPLETED)}>
+                    Tandai sebagai Selesai
+                  </Button>
+                )}
                 <Button
                   variant="destructive"
                   onClick={() => updateStatus(ORDER_STATUS.CANCELLED)}
                 >
                   Batalkan Pesanan
                 </Button>
-              )}
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
