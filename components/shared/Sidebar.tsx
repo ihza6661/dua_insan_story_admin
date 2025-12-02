@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal, Settings, XCircle } from 'lucide-react';
+import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal, Settings, XCircle, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
@@ -14,6 +14,7 @@ const navItems = [
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
   { href: '/admin/orders', icon: ShoppingBag, label: 'Pesanan' },
   { href: '/admin/cancellation-requests', icon: XCircle, label: 'Pembatalan Pesanan' },
+  { href: '/admin/ulasan', icon: Star, label: 'Ulasan Produk' },
   { href: '/admin/galeri', icon: GalleryHorizontal, label: 'Galeri' },
   { href: '/admin/pengguna/admin', icon: Users, label: 'Kelola Admin' },
   { href: '/admin/pengguna/customer', icon: Users, label: 'Kelola Pelanggan' },

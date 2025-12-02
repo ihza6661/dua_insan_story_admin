@@ -217,3 +217,43 @@ export interface DesignProof {
     reviewed_by_user?: User;
     order_item?: OrderItem;
 }
+
+export interface ReviewImage {
+    id: number;
+    image_url: string;
+}
+
+export interface Review {
+    id: number;
+    user_id: number;
+    user_name: string;
+    product_id: number;
+    product_name: string;
+    order_item_id: number;
+    rating: number;
+    comment: string | null;
+    is_verified_purchase: boolean;
+    status: 'pending' | 'approved' | 'rejected';
+    is_featured: boolean;
+    helpful_count: number;
+    admin_response: string | null;
+    admin_response_at: string | null;
+    created_at: string;
+    updated_at: string;
+    images: ReviewImage[];
+}
+
+export interface ReviewStatistics {
+    total_reviews: number;
+    pending_reviews: number;
+    approved_reviews: number;
+    rejected_reviews: number;
+    average_rating: number;
+    rating_breakdown: {
+        '5': number;
+        '4': number;
+        '3': number;
+        '2': number;
+        '1': number;
+    };
+}
