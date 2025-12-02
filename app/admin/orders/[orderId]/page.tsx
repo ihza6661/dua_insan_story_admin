@@ -286,18 +286,19 @@ const OrderDetailsPage = () => {
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
             {orderData.order_status === ORDER_STATUS.COMPLETED ? (
-              <div className="flex items-center justify-center bg-card rounded-lg border p-4">
+              <div className="flex items-center justify-center border border-green-200 bg-card rounded-lg p-4">
                 <div className="text-center">
                   <Badge variant="success" className="mb-2">
                     {getOrderStatusLabel(ORDER_STATUS.COMPLETED)}
                   </Badge>
                   <p className="text-foreground text-sm">
-                    Pesanan telah selesai. Tidak ada tindakan lebih lanjut yang diperlukan.
+                    Pesanan telah selesai. Tidak ada tindakan lebih lanjut yang
+                    diperlukan.
                   </p>
                 </div>
               </div>
             ) : orderData.order_status === ORDER_STATUS.CANCELLED ? (
-              <div className="flex items-center justify-center rounded-lg border border-red-200 bg-red-50 p-4">
+              <div className="flex items-center justify-center rounded-lg border border-red-200 p-4">
                 <div className="text-center">
                   <Badge variant="destructive" className="mb-2">
                     {getOrderStatusLabel(ORDER_STATUS.CANCELLED)}
@@ -320,7 +321,9 @@ const OrderDetailsPage = () => {
                   </Button>
                 )}
                 {orderData.order_status === ORDER_STATUS.PROCESSING && (
-                  <Button onClick={() => updateStatus(ORDER_STATUS.IN_PRODUCTION)}>
+                  <Button
+                    onClick={() => updateStatus(ORDER_STATUS.IN_PRODUCTION)}
+                  >
                     Tandai sebagai Produksi
                   </Button>
                 )}
@@ -446,9 +449,9 @@ const OrderDetailsPage = () => {
       </Card>
 
       {/* Design Proof Section */}
-      <DesignProofSection 
-        orderId={orderData.id} 
-        orderItems={orderData.order_items} 
+      <DesignProofSection
+        orderId={orderData.id}
+        orderItems={orderData.order_items}
       />
     </div>
   );
