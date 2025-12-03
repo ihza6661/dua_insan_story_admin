@@ -30,8 +30,12 @@ interface ProductVariantsManagerProps {
 }
 
 export function ProductVariantsManager({ product }: ProductVariantsManagerProps) {
-  const formatOptions = (options: { value: string }[]): string => {
-    return options.map(opt => opt.value).join(' / ');
+  const formatOptions = (options: { id?: number; value: string }[]): string => {
+    // Remove duplicates if they exist
+    const uniqueOptions = options.filter((opt, index, self) => 
+      index === self.findIndex((o) => o.value === opt.value)
+    );
+    return uniqueOptions.map(opt => opt.value).join(' / ');
   };
 
   const findFeaturedImage = (images: Product['variants'][number]['images']) => {

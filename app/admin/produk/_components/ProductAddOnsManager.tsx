@@ -165,7 +165,8 @@ export function ProductAddOnsManager({ product }: ProductAddOnsManagerProps) {
             </TableHeader>
             <TableBody>
               {product.add_ons.length > 0 ? (
-                product.add_ons.map((addOn) => (
+                // Remove duplicates by filtering unique IDs
+                Array.from(new Map(product.add_ons.map(addon => [addon.id, addon])).values()).map((addOn) => (
                   <TableRow key={addOn.id}>
                     <TableCell className="font-medium">{addOn.name}</TableCell>
                     <TableCell>{currencyFormatter.format(addOn.price)}</TableCell>

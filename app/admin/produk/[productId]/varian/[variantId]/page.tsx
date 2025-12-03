@@ -29,7 +29,11 @@ export default function EditVarianPage() {
   });
 
   const formatOptions = (options: { value: string }[]): string => {
-    return options.map(opt => opt.value).join(' / ');
+    // Remove duplicates if they exist
+    const uniqueOptions = options.filter((opt, index, self) => 
+      index === self.findIndex((o) => o.value === opt.value)
+    );
+    return uniqueOptions.map(opt => opt.value).join(' / ');
   };
 
   if (isLoading) {
