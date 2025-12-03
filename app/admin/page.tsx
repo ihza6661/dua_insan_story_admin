@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDashboardData } from "@/services/api/dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
+import { formatRupiah } from "@/lib/utils";
 import {
   BarChart,
   Bar,
@@ -54,7 +55,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isLoading ? "..." : `Rp ${stats?.total_revenue.toLocaleString()}`}
+              {isLoading ? "..." : formatRupiah(stats?.total_revenue ?? 0)}
             </div>
           </CardContent>
         </Card>
@@ -107,8 +108,11 @@ export default function AdminDashboardPage() {
               <BarChart data={weeklyRevenue}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
+                <YAxis tickFormatter={(value) => formatRupiah(value)} />
+                <Tooltip 
+                  formatter={(value: number) => formatRupiah(value)}
+                  labelStyle={{ color: '#000' }}
+                />
                 <Legend />
                 <Bar dataKey="revenue" fill="#8884d8" />
               </BarChart>

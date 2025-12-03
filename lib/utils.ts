@@ -16,3 +16,12 @@ export const getImageUrl = (path: string | null | undefined): string => {
   const imagePath = path.replace(/^\//, ''); // Remove leading slash
   return `${storageUrl}/${imagePath}`;
 };
+
+export const formatRupiah = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
