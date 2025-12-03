@@ -31,9 +31,7 @@ export default function AdminDashboardPage() {
       date: string;
       revenue: number;
     }[];
-  }>({    queryKey: ["dashboardData"],
-    queryFn: getDashboardData,
-  });
+  }>({ queryKey: ["dashboardData"], queryFn: getDashboardData });
 
   const stats = data?.stats;
   const weeklyRevenue = data?.weekly_revenue;
@@ -50,7 +48,7 @@ export default function AdminDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Pendapatan</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -62,7 +60,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Customers
+              Total Pelanggan
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -74,7 +72,7 @@ export default function AdminDashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Pesanan</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -86,7 +84,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Pending Orders
+              Pesanan Tertunda
             </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -101,17 +99,23 @@ export default function AdminDashboardPage() {
       <div className="mt-6">
         <Card>
           <CardHeader>
-            <CardTitle>Weekly Revenue</CardTitle>
+            <CardTitle>Pendapatan Mingguan</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={500}>
               <BarChart data={weeklyRevenue}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis tickFormatter={(value) => formatRupiah(value)} />
-                <Tooltip 
+                <YAxis
+                  width={95}
+                  interval="preserveStartEnd"
+                  tickCount={5}
+                  tickFormatter={(value) => formatRupiah(value)}
+                  className="text-xs"
+                />
+                <Tooltip
                   formatter={(value: number) => formatRupiah(value)}
-                  labelStyle={{ color: '#000' }}
+                  labelStyle={{ color: "#000" }}
                 />
                 <Legend />
                 <Bar dataKey="revenue" fill="#8884d8" />
@@ -123,3 +127,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
