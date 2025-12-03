@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -58,6 +57,7 @@ export function AdminResponseDialog({ review, open, onOpenChange }: AdminRespons
         description: response.message,
       });
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['review-statistics'] });
       onOpenChange(false);
       form.reset();
     },

@@ -225,6 +225,7 @@ export function DesignProofSection({ orderId, orderItems }: DesignProofSectionPr
                     <img
                       src={getStorageUrl(proof.thumbnail_url) || ''}
                       alt={proof.file_name || 'Design proof'}
+                      loading="lazy"
                       className="w-20 h-20 object-cover rounded"
                     />
                   ) : (

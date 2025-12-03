@@ -257,3 +257,43 @@ export interface ReviewStatistics {
         '1': number;
     };
 }
+
+export interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
+export interface PaginatedResponse<T> {
+    data: T[];
+    meta: PaginationMeta;
+}
+
+export interface OrderFilters {
+    search?: string;
+    order_status?: string;
+    payment_status?: string;
+    date_from?: string;
+    date_to?: string;
+    per_page?: number;
+    page?: number;
+}
+
+export interface BulkUpdateStatusRequest {
+    order_ids: number[];
+    order_status: string;
+    tracking_number?: string;
+}
+
+export interface ExportOrdersRequest {
+    format?: 'csv' | 'excel';
+    order_ids?: number[];
+    search?: string;
+    order_status?: string;
+    payment_status?: string;
+    date_from?: string;
+    date_to?: string;
+}

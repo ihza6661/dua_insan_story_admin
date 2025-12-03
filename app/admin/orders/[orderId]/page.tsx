@@ -201,6 +201,7 @@ const OrderDetailsPage = () => {
                       <img
                         src={orderData.invitation_detail.prewedding_photo}
                         alt="Foto Prewedding"
+                        loading="lazy"
                         className="h-auto w-full max-w-sm rounded-md object-contain"
                       />
                     </a>

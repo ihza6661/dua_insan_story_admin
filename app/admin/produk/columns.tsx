@@ -125,6 +125,43 @@ export const columns: ColumnDef<Product>[] = [
     }
   },
   {
+    id: "stock",
+    meta: { cardLabel: "Stok" },
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Stok
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    accessorFn: (row) => {
+      if (!row.variants || row.variants.length === 0) return 0;
+      return row.variants.reduce((total, variant) => total + (variant.stock || 0), 0);
+    },
+    cell: ({ row }) => {
+      const variants = row.original.variants || [];
+      const totalStock = variants.reduce((total, variant) => total + (variant.stock || 0), 0);
+      const hasLowStock = variants.some((v) => v.stock > 0 && v.stock < 10);
+      const isOutOfStock = totalStock === 0;
+
+      return (
+        <div className="text-center space-y-1">
+          <div className="font-medium">{totalStock} unit</div>
+          {isOutOfStock && (
+            <Badge variant="destructive" className="text-xs">Habis</Badge>
+          )}
+          {!isOutOfStock && hasLowStock && (
+            <Badge variant="default" className="text-xs bg-amber-500">Stok Rendah</Badge>
+          )}
+        </div>
+      );
+    }
+  },
+  {
     accessorKey: "is_active",
     meta: { cardLabel: "Status" },
     header: ({ column }) => {

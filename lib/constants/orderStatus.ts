@@ -21,6 +21,24 @@ export const ORDER_STATUS = {
 export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
 
 /**
+ * Order statuses as array for dropdowns/forms
+ */
+export const ORDER_STATUSES = [
+  { value: 'pending payment', label: 'Menunggu Pembayaran' },
+  { value: 'partially paid', label: 'DP Lunas' },
+  { value: 'paid', label: 'Lunas' },
+  { value: 'processing', label: 'Diproses' },
+  { value: 'design approval', label: 'Persetujuan Desain' },
+  { value: 'in production', label: 'Dalam Produksi' },
+  { value: 'shipped', label: 'Dikirim' },
+  { value: 'delivered', label: 'Terkirim' },
+  { value: 'completed', label: 'Selesai' },
+  { value: 'cancelled', label: 'Dibatalkan' },
+  { value: 'failed', label: 'Gagal' },
+  { value: 'refunded', label: 'Dikembalikan' },
+] as const;
+
+/**
  * Get Indonesian label for order status
  */
 export function getOrderStatusLabel(status: string): string {

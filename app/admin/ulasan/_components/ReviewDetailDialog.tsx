@@ -121,6 +121,7 @@ export function ReviewDetailDialog({ review, open, onOpenChange }: ReviewDetailD
                       <img 
                         src={image.image_url} 
                         alt="Review"
+                        loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     </a>

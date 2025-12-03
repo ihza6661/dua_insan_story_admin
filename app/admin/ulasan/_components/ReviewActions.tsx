@@ -19,8 +19,7 @@ import { Review, GenericError } from "@/lib/types";
 import { 
   approveReview, 
   rejectReview, 
-  toggleFeaturedReview, 
-  deleteReview 
+  toggleFeaturedReview
 } from "@/services/api/review.service";
 import { ReviewDetailDialog } from "./ReviewDetailDialog";
 import { AdminResponseDialog } from "./AdminResponseDialog";
@@ -77,6 +76,7 @@ export function ReviewActions({ review }: ReviewActionsProps) {
         description: response.message,
       });
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['review-statistics'] });
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage = error.response?.data?.message || "Gagal mengubah status unggulan.";
