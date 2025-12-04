@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "react-day-picker/style.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -118,4 +119,50 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Fix react-day-picker calendar grid alignment */
+.rdp {
+  --rdp-cell-size: 40px;
+}
+
+.rdp-months {
+  display: flex;
+}
+
+.rdp-month {
+  display: flex;
+  flex-direction: column;
+}
+
+.rdp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rdp-tbody,
+.rdp-thead {
+  display: block;
+}
+
+.rdp-head_row,
+.rdp-row {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  width: 100% !important;
+}
+
+.rdp-head_cell,
+.rdp-cell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+}
+
+.rdp-day {
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }

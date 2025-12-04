@@ -7,7 +7,7 @@ import { DollarSign, Users, CreditCard, Activity, ShoppingCart, TrendingUp, XCir
 import { formatRupiah } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { useState, useMemo } from "react";
-import { DateRange } from "react-day-picker";
+import { DateRange } from "@/components/ui/new-date-range-picker";
 import { format, subDays } from "date-fns";
 import { DateRangeSelector } from "@/components/dashboard/DateRangeSelector";
 import { StatCard } from "@/components/dashboard/StatCard";

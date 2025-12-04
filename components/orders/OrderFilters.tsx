@@ -3,11 +3,10 @@
 import * as React from "react"
 import { useEffect, useState } from "react"
 import { Search, X } from "lucide-react"
-import { DateRange } from "react-day-picker"
+import { DateRange, DateRangePicker } from "@/components/ui/date-range-picker"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Card, CardContent } from "@/components/ui/card"
 
 export interface OrderFilterValues {

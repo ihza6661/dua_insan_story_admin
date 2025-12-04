@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from 'next/font/google'
 import Script from "next/script";
 import "./globals.css";
+import "./datepicker.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";

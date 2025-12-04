@@ -297,3 +297,41 @@ export interface ExportOrdersRequest {
     date_from?: string;
     date_to?: string;
 }
+
+export interface PromoCodeUsage {
+    id: number;
+    user_id: number;
+    promo_code_id: number;
+    used_at: string;
+    user?: User;
+}
+
+export interface PromoCode {
+    id: number;
+    code: string;
+    discount_type: 'percentage' | 'fixed';
+    discount_value: number;
+    min_purchase: number | null;
+    max_discount: number | null;
+    usage_limit: number | null;
+    times_used: number;
+    valid_from: string;
+    valid_until: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+    usages?: PromoCodeUsage[];
+}
+
+export interface PromoCodeStatistics {
+    total_promo_codes: number;
+    active_promo_codes: number;
+    total_usages: number;
+    most_used_promo_codes: Array<{
+        code: string;
+        discount_type: string;
+        discount_value: number;
+        times_used: number;
+        usage_limit: number | null;
+    }>;
+}
