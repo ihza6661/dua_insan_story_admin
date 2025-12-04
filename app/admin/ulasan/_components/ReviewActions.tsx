@@ -37,12 +37,13 @@ export function ReviewActions({ review }: ReviewActionsProps) {
 
   const approveMutation = useMutation({
     mutationFn: approveReview,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success("Ulasan Disetujui", {
         description: response.message,
       });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
-      queryClient.invalidateQueries({ queryKey: ['review-statistics'] });
+      // Invalidate and refetch immediately
+      await queryClient.invalidateQueries({ queryKey: ['reviews'], refetchType: 'active' });
+      await queryClient.invalidateQueries({ queryKey: ['review-statistics'], refetchType: 'active' });
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage = error.response?.data?.message || "Gagal menyetujui ulasan.";
@@ -54,12 +55,13 @@ export function ReviewActions({ review }: ReviewActionsProps) {
 
   const rejectMutation = useMutation({
     mutationFn: rejectReview,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success("Ulasan Ditolak", {
         description: response.message,
       });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
-      queryClient.invalidateQueries({ queryKey: ['review-statistics'] });
+      // Invalidate and refetch immediately
+      await queryClient.invalidateQueries({ queryKey: ['reviews'], refetchType: 'active' });
+      await queryClient.invalidateQueries({ queryKey: ['review-statistics'], refetchType: 'active' });
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage = error.response?.data?.message || "Gagal menolak ulasan.";
@@ -71,12 +73,14 @@ export function ReviewActions({ review }: ReviewActionsProps) {
 
   const toggleFeaturedMutation = useMutation({
     mutationFn: toggleFeaturedReview,
-    onSuccess: (response) => {
-      toast.success(review.is_featured ? "Ulasan Tidak Lagi Unggulan" : "Ulasan Ditandai Unggulan", {
+    onSuccess: async (response) => {
+      const newStatus = !review.is_featured;
+      toast.success(newStatus ? "Ulasan Ditandai Unggulan" : "Ulasan Tidak Lagi Unggulan", {
         description: response.message,
       });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
-      queryClient.invalidateQueries({ queryKey: ['review-statistics'] });
+      // Invalidate and refetch immediately
+      await queryClient.invalidateQueries({ queryKey: ['reviews'], refetchType: 'active' });
+      await queryClient.invalidateQueries({ queryKey: ['review-statistics'], refetchType: 'active' });
     },
     onError: (error: AxiosError<GenericError>) => {
       const errorMessage = error.response?.data?.message || "Gagal mengubah status unggulan.";
