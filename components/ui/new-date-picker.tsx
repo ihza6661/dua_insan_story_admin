@@ -70,8 +70,10 @@ export function DatePicker({
 }
 
 // For direct input usage (without popover) - simplified
-export const DateInput = React.forwardRef<any, any>(
-  ({ className, ...props }, ref) => {
+export const DateInput = React.forwardRef<
+  ReactDatePicker,
+  React.ComponentProps<typeof ReactDatePicker>
+>(({ className, ...props }, ref) => {
     return (
       <ReactDatePicker
         ref={ref}

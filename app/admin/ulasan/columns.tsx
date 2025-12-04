@@ -1,20 +1,12 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Star } from "lucide-react"
+import { ArrowUpDown, Star } from "lucide-react"
 import { format } from "date-fns"
 import { id as localeId } from "date-fns/locale"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Review } from "@/lib/types"
 import { ReviewActions } from "./_components/ReviewActions"
 
