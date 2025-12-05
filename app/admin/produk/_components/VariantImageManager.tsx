@@ -79,7 +79,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Unggah Gambar Baru</h3>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 flex items-center gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
           <input
             type="file"
             multiple
@@ -98,7 +98,7 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
       <div>
         <h3 className="text-lg font-medium">Daftar Gambar</h3>
         {variant.images && Array.isArray(variant.images) && variant.images.length > 0 ? (
-          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 w-full max-w-full">
             {variant.images.map((image) => (
               <div key={image.id} className="relative group border rounded-md overflow-hidden aspect-square">
                 {image.is_featured && (

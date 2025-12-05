@@ -45,7 +45,7 @@ export default function EditVarianPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 w-full overflow-x-hidden">
       <div className="mb-4">
         <Button asChild variant="outline" size="sm">
           <Link href={`/admin/produk/${productId}/edit`}>
