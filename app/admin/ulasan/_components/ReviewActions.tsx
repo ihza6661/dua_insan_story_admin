@@ -73,16 +73,45 @@ export function ReviewActions({ review }: ReviewActionsProps) {
 
   const toggleFeaturedMutation = useMutation({
     mutationFn: toggleFeaturedReview,
+    onMutate: async () => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['reviews'] });
+
+      // Snapshot the previous value
+      const previousReviews = queryClient.getQueryData(['reviews']);
+
+      // Optimistically update to the new value
+      queryClient.setQueriesData({ queryKey: ['reviews'] }, (old: unknown) => {
+        if (!old || typeof old !== 'object' || !('data' in old)) return old;
+        const typedOld = old as { data: Review[] };
+        
+        return {
+          ...typedOld,
+          data: typedOld.data.map((r: Review) => 
+            r.id === review.id 
+              ? { ...r, is_featured: !r.is_featured }
+              : r
+          )
+        };
+      });
+
+      return { previousReviews };
+    },
     onSuccess: async (response) => {
       const newStatus = !review.is_featured;
       toast.success(newStatus ? "Ulasan Ditandai Unggulan" : "Ulasan Tidak Lagi Unggulan", {
         description: response.message,
       });
-      // Invalidate and refetch immediately
+      // Refetch to ensure server state is correct
       await queryClient.invalidateQueries({ queryKey: ['reviews'], refetchType: 'active' });
       await queryClient.invalidateQueries({ queryKey: ['review-statistics'], refetchType: 'active' });
     },
-    onError: (error: AxiosError<GenericError>) => {
+    onError: (error: AxiosError<GenericError>, _variables, context) => {
+      // Rollback on error
+      if (context?.previousReviews) {
+        queryClient.setQueryData(['reviews'], context.previousReviews);
+      }
+      
       const errorMessage = error.response?.data?.message || "Gagal mengubah status unggulan.";
       toast.error("Gagal", {
         description: errorMessage,

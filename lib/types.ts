@@ -107,9 +107,8 @@ export interface GalleryItem {
 }
 
 export interface ProductVariantImage {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    image: any;
     id: number;
+    image: string;
     image_url: string;
     alt_text: string | null;
     is_featured: boolean;

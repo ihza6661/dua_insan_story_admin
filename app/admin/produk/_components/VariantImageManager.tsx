@@ -97,10 +97,10 @@ export function VariantImageManager({ variant }: VariantImageManagerProps) {
 
       <div>
         <h3 className="text-lg font-medium">Daftar Gambar</h3>
-        {variant.images.length > 0 ? (
+        {variant.images && Array.isArray(variant.images) && variant.images.length > 0 ? (
           <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {variant.images.map((image) => (
-              <div key={image.id} className="relative group border rounded-md overflow-hidden">
+              <div key={image.id} className="relative group border rounded-md overflow-hidden aspect-square">
                 {image.is_featured && (
                   <div className="absolute top-2 left-2 z-10 bg-primary text-primary-foreground rounded-full p-1.5">
                     <Star className="h-4 w-4" />
