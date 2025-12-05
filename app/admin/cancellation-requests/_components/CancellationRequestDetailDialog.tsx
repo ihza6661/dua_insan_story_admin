@@ -173,7 +173,7 @@ export function CancellationRequestDetailDialog({
                 Pesanan #{request.order?.order_number}
               </DialogDescription>
             </div>
-            <div className="self-start">{getStatusBadge(request.status)}</div>
+            <div className="self-start pr-6">{getStatusBadge(request.status)}</div>
           </div>
         </DialogHeader>
 

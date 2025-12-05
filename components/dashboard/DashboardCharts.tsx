@@ -29,6 +29,8 @@ export function DashboardCharts({ revenueTrend, statusBreakdown, statusColors }:
     value: count,
   }));
 
+  const totalOrders = statusChartData.reduce((sum, item) => sum + item.value, 0);
+
   return (
     <>
       {/* Revenue Trend Chart */}
@@ -42,7 +44,7 @@ export function DashboardCharts({ revenueTrend, statusBreakdown, statusColors }:
             <BarChart data={revenueTrend}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis />
+              <YAxis className="text-xs" />
               <Tooltip
                 formatter={(value: number) => formatRupiah(value)}
                 labelFormatter={(label) => `Tanggal: ${label}`}
@@ -60,30 +62,81 @@ export function DashboardCharts({ revenueTrend, statusBreakdown, statusColors }:
           <CardTitle>Status Pesanan</CardTitle>
           <CardDescription>Distribusi pesanan berdasarkan status</CardDescription>
         </CardHeader>
-        <CardContent className="flex items-center justify-center">
+        <CardContent className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
           {statusChartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={statusChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={(props: PieLabelRenderProps) => {
-                    const percent = typeof props.percent === 'number' ? props.percent : 0;
-                    return `${props.name}: ${(percent * 100).toFixed(0)}%`;
-                  }}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {statusChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={statusColors[entry.name] || "#8884d8"} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            <>
+              {/* Pie Chart */}
+              <div className="w-full md:w-[320px] flex-shrink-0">
+                <ResponsiveContainer width="100%" height={280}>
+                  <PieChart>
+                    <Pie
+                      data={statusChartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={false}
+                      outerRadius="80%"
+                      innerRadius="55%"
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {statusChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={statusColors[entry.name] || "#8884d8"} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value: number) => [`${value} pesanan`, 'Jumlah']}
+                      contentStyle={{ 
+                        borderRadius: '0.5rem',
+                        border: 'none',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                      }}
+                    />
+                    <text
+                      x="50%"
+                      y="45%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className="text-2xl sm:text-3xl font-bold fill-foreground"
+                    >
+                      {totalOrders}
+                    </text>
+                    <text
+                      x="50%"
+                      y="58%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className="text-xs sm:text-sm fill-muted-foreground"
+                    >
+                      Total Pesanan
+                    </text>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Legend */}
+              <div className="flex flex-col gap-3 w-full md:w-auto md:min-w-[200px]">
+                {statusChartData.map((entry, index) => {
+                  const percent = totalOrders > 0 ? ((entry.value / totalOrders) * 100).toFixed(1) : 0;
+                  return (
+                    <div key={`legend-${index}`} className="flex items-center gap-3">
+                      <div 
+                        className="w-4 h-4 rounded-sm shrink-0" 
+                        style={{ backgroundColor: statusColors[entry.name] || "#8884d8" }}
+                      />
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <span className="text-sm font-medium text-foreground truncate">
+                          {entry.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {entry.value} pesanan ({percent}%)
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
           ) : (
             <p className="text-sm text-muted-foreground">Tidak ada data untuk ditampilkan</p>
           )}
