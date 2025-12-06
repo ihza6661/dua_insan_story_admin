@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Download } from 'lucide-react';
 import { useOrders } from '@/lib/hooks/useOrders';
@@ -80,7 +80,7 @@ const OrdersPage = () => {
 
   const { data, isLoading, isError, error } = useOrders(apiFilters);
 
-  const orders = data?.data || [];
+  const orders = useMemo(() => data?.data || [], [data]);
   const meta = data?.meta;
 
   // Selection handlers - memoized to prevent re-renders

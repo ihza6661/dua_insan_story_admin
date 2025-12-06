@@ -12,7 +12,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  type PieLabelRenderProps,
 } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatRupiah } from "@/lib/utils";

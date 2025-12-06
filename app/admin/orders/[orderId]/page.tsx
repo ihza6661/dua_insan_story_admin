@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOrderDetail } from "@/lib/hooks/useOrders";
@@ -198,10 +199,11 @@ const OrderDetailsPage = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
+                      <Image
                         src={orderData.invitation_detail.prewedding_photo}
                         alt="Foto Prewedding"
-                        loading="lazy"
+                        width={500}
+                        height={500}
                         className="h-auto w-full max-w-sm rounded-md object-contain"
                       />
                     </a>

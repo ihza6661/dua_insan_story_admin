@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Upload, FileText, Download, Trash2, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -222,10 +223,11 @@ export function DesignProofSection({ orderId, orderItems }: DesignProofSectionPr
               >
                 <div className="flex items-start space-x-4 flex-1">
                   {proof.thumbnail_url ? (
-                    <img
+                    <Image
                       src={getStorageUrl(proof.thumbnail_url) || ''}
                       alt={proof.file_name || 'Design proof'}
-                      loading="lazy"
+                      width={80}
+                      height={80}
                       className="w-20 h-20 object-cover rounded"
                     />
                   ) : (

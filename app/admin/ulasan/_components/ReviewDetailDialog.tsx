@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { Star, Image as ImageIcon } from "lucide-react";
@@ -118,10 +119,11 @@ export function ReviewDetailDialog({ review, open, onOpenChange }: ReviewDetailD
                       rel="noopener noreferrer"
                       className="aspect-square rounded-lg overflow-hidden border hover:border-primary transition-colors"
                     >
-                      <img 
+                      <Image 
                         src={image.image_url} 
                         alt="Review"
-                        loading="lazy"
+                        width={300}
+                        height={300}
                         className="w-full h-full object-cover"
                       />
                     </a>
