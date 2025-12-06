@@ -22,4 +22,25 @@ api.interceptors.request.use(
     }
 );
 
+// Response interceptor for auto-logout on 401
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Auto-logout on 401 Unauthorized (invalid/expired token)
+        if (error.response?.status === 401) {
+            const token = useAuthStore.getState().token;
+            if (token) {
+                // Clear auth state
+                useAuthStore.getState().clearAuth();
+                
+                // Redirect to login page
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/';
+                }
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;
