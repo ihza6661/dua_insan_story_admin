@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { format } from 'date-fns';
 import { Download } from 'lucide-react';
 import { useOrders } from '@/lib/hooks/useOrders';
