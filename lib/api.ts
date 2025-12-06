@@ -31,7 +31,7 @@ api.interceptors.response.use(
             const token = useAuthStore.getState().token;
             if (token) {
                 // Clear auth state
-                useAuthStore.getState().clearAuth();
+                useAuthStore.getState().logout();
                 
                 // Redirect to login page
                 if (typeof window !== 'undefined') {
