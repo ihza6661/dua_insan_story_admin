@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal, Settings, XCircle, Star, TicketPercent } from 'lucide-react';
+import { Shapes, LayoutDashboard, ShoppingBag, Wand2, Puzzle, Users, GalleryHorizontal, Settings, XCircle, Star, TicketPercent, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
@@ -12,6 +12,8 @@ const navItems = [
   { href: '/admin/atribut', icon: Wand2, label: 'Atribut' },
   { href: '/admin/item-tambahan', icon: Puzzle, label: 'Item Tambahan' },
   { href: '/admin/produk', icon: ShoppingBag, label: 'Produk' },
+  { href: '/admin/template-undangan', icon: Mail, label: 'Template Undangan' },
+  { href: '/admin/undangan-digital', icon: Mail, label: 'Undangan Digital' },
   { href: '/admin/orders', icon: ShoppingBag, label: 'Pesanan' },
   { href: '/admin/cancellation-requests', icon: XCircle, label: 'Pembatalan Pesanan' },
   { href: '/admin/promo-codes', icon: TicketPercent, label: 'Kode Promo' },
