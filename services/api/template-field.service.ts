@@ -18,7 +18,7 @@ export interface TemplateField {
     field_label: string;
     field_type: FieldType;
     field_category: FieldCategory;
-    placeholder_text: string | null;
+    placeholder: string | null;
     default_value: string | null;
     help_text: string | null;
     validation_rules: ValidationRules;
@@ -53,7 +53,7 @@ export interface TemplateFieldFormData {
     field_label: string;
     field_type: FieldType;
     field_category: FieldCategory;
-    placeholder_text?: string;
+    placeholder?: string;
     default_value?: string;
     help_text?: string;
     validation_rules?: ValidationRules;

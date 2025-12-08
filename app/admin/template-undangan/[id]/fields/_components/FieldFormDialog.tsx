@@ -50,7 +50,7 @@ const fieldFormSchema = z.object({
   field_label: z.string().min(1, "Label wajib diisi"),
   field_type: z.enum(["text", "textarea", "date", "time", "url", "email", "phone", "image", "color"]),
   field_category: z.enum(["couple", "event", "venue", "design", "general"]),
-  placeholder_text: z.string().optional(),
+  placeholder: z.string().optional(),
   default_value: z.string().optional(),
   help_text: z.string().optional(),
   validation_rules: z.object({
@@ -96,7 +96,7 @@ export function FieldFormDialog({
       field_label: field?.field_label || "",
       field_type: field?.field_type || "text",
       field_category: field?.field_category || "general",
-      placeholder_text: field?.placeholder_text || "",
+      placeholder: field?.placeholder || "",
       default_value: field?.default_value || "",
       help_text: field?.help_text || "",
       validation_rules: field?.validation_rules || {},
@@ -112,7 +112,7 @@ export function FieldFormDialog({
         field_label: field.field_label,
         field_type: field.field_type,
         field_category: field.field_category,
-        placeholder_text: field.placeholder_text || "",
+        placeholder: field.placeholder || "",
         default_value: field.default_value || "",
         help_text: field.help_text || "",
         validation_rules: field.validation_rules || {},
@@ -281,7 +281,7 @@ export function FieldFormDialog({
 
             <FormField
               control={form.control}
-              name="placeholder_text"
+              name="placeholder"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Placeholder (opsional)</FormLabel>
