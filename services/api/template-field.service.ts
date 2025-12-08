@@ -29,7 +29,14 @@ export interface TemplateField {
 }
 
 interface TemplateFieldsResponse {
-    data: TemplateField[];
+    data: {
+        template: {
+            id: number;
+            name: string;
+            has_custom_fields: boolean;
+        };
+        fields: TemplateField[];
+    };
 }
 
 interface TemplateFieldResponse {
@@ -58,7 +65,7 @@ export async function getTemplateFields(templateId: number): Promise<TemplateFie
     const response = await api.get<TemplateFieldsResponse>(
         `/admin/invitation-templates/${templateId}/fields`
     );
-    return response.data.data;
+    return response.data.data.fields;
 }
 
 export async function getTemplateFieldById(
