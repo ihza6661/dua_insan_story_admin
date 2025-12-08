@@ -1,9 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Settings } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, GripVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,13 +13,45 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { InvitationTemplate } from "@/services/api/invitation-template.service";
-import { formatRupiah, getImageUrl } from "@/lib/utils";
-import { DeleteTemplateDialog } from "./_components/DeleteTemplateDialog";
-import { TemplateFormDialog } from "./_components/TemplateFormDialog";
-import { ToggleActiveButton } from "./_components/ToggleActiveButton";
+import { TemplateField } from "@/services/api/template-field.service";
+import { FieldFormDialog } from "./FieldFormDialog";
+import { DeleteFieldDialog } from "./DeleteFieldDialog";
+import { ToggleFieldActiveButton } from "./ToggleFieldActiveButton";
+import { DuplicateFieldButton } from "./DuplicateFieldButton";
 
-export const columns: ColumnDef<InvitationTemplate>[] = [
+const fieldTypeLabels: Record<string, string> = {
+  text: "Teks",
+  textarea: "Area Teks",
+  date: "Tanggal",
+  time: "Waktu",
+  url: "URL",
+  email: "Email",
+  phone: "Telepon",
+  image: "Gambar",
+  color: "Warna",
+};
+
+const fieldCategoryLabels: Record<string, string> = {
+  couple: "Pasangan",
+  event: "Acara",
+  venue: "Tempat",
+  design: "Desain",
+  general: "Umum",
+};
+
+export const fieldColumns: ColumnDef<TemplateField>[] = [
+  {
+    id: "drag",
+    header: "",
+    cell: () => {
+      return (
+        <div className="cursor-grab active:cursor-grabbing">
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </div>
+      );
+    },
+    size: 40,
+  },
   {
     id: "rowNumber",
     meta: { cardLabel: "No." },
@@ -42,85 +72,87 @@ export const columns: ColumnDef<InvitationTemplate>[] = [
     accessorFn: (row, index) => index,
   },
   {
-    id: "image",
-    header: "Preview",
-    cell: ({ row }) => {
-      const imageUrl = getImageUrl(row.original.thumbnail_url);
-
+    accessorKey: "field_label",
+    meta: { cardLabel: "Label" },
+    header: ({ column }) => {
       return (
-        <div className="w-24 h-16 relative rounded-md overflow-hidden bg-muted">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={row.original.name}
-              fill
-              sizes="6rem"
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-xs text-muted-foreground">
-              No Image
-            </div>
-          )}
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Label
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div>
+          <div className="font-medium">{row.getValue("field_label")}</div>
+          <div className="text-xs text-muted-foreground">{row.original.field_key}</div>
         </div>
       );
     },
   },
   {
-    accessorKey: "name",
-    meta: { cardLabel: "Nama Template" },
+    accessorKey: "field_type",
+    meta: { cardLabel: "Tipe" },
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama Template
+          Tipe
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("name")}</div>;
+      const type = row.getValue("field_type") as string;
+      return (
+        <Badge variant="outline">
+          {fieldTypeLabels[type] || type}
+        </Badge>
+      );
     },
   },
   {
-    accessorKey: "price",
-    meta: { cardLabel: "Harga" },
+    accessorKey: "field_category",
+    meta: { cardLabel: "Kategori" },
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Harga
+          Kategori
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const price = parseFloat(row.getValue("price"));
-      return <div className="font-medium">{formatRupiah(price)}</div>;
+      const category = row.getValue("field_category") as string;
+      return (
+        <Badge variant="secondary">
+          {fieldCategoryLabels[category] || category}
+        </Badge>
+      );
     },
   },
   {
-    id: "invitations_count",
-    accessorKey: "invitations_count",
-    meta: { cardLabel: "Digunakan" },
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Digunakan
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    id: "required",
+    meta: { cardLabel: "Wajib" },
+    header: "Wajib",
     cell: ({ row }) => {
-      const count = row.original.invitations_count || 0;
-      return <div className="text-center">{count} undangan</div>;
+      const isRequired = row.original.validation_rules?.required;
+      return (
+        <div className="text-center">
+          <Badge variant={isRequired ? "default" : "outline"}>
+            {isRequired ? "Ya" : "Tidak"}
+          </Badge>
+        </div>
+      );
     },
   },
   {
@@ -153,7 +185,7 @@ export const columns: ColumnDef<InvitationTemplate>[] = [
     meta: { cardLabel: "Aksi" },
     header: () => <div className="text-right">Aksi</div>,
     cell: ({ row }) => {
-      const template = row.original;
+      const field = row.original;
       return (
         <div className="text-right">
           <DropdownMenu>
@@ -165,15 +197,9 @@ export const columns: ColumnDef<InvitationTemplate>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-              <Link href={`/admin/template-undangan/${template.id}/fields`}>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Kelola Field
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuSeparator />
-              <TemplateFormDialog 
-                template={template}
+              <FieldFormDialog 
+                templateId={field.template_id}
+                field={field}
                 trigger={
                   <DropdownMenuItem 
                     className="cursor-pointer"
@@ -183,12 +209,14 @@ export const columns: ColumnDef<InvitationTemplate>[] = [
                   </DropdownMenuItem>
                 }
               />
-              <ToggleActiveButton template={template} />
               <DropdownMenuSeparator />
-              <DeleteTemplateDialog 
-                templateId={template.id}
-                templateName={template.name}
-                hasInvitations={(template.invitations_count || 0) > 0}
+              <ToggleFieldActiveButton field={field} />
+              <DuplicateFieldButton field={field} />
+              <DropdownMenuSeparator />
+              <DeleteFieldDialog 
+                templateId={field.template_id}
+                fieldId={field.id}
+                fieldLabel={field.field_label}
               />
             </DropdownMenuContent>
           </DropdownMenu>
