@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Filter } from "lucide-react";
+import { Filter, Calendar } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -45,11 +46,19 @@ export default function UndanganDigitalPage() {
 
   return (
     <>
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Undangan Digital</h1>
-        <p className="text-muted-foreground">
-          Monitor semua undangan digital yang dibuat pelanggan.
-        </p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Undangan Digital</h1>
+          <p className="text-muted-foreground">
+            Monitor semua undangan digital yang dibuat pelanggan.
+          </p>
+        </div>
+        <Link href="/admin/undangan-digital/terjadwal">
+          <Button variant="outline" className="gap-2">
+            <Calendar className="h-4 w-4" />
+            Lihat Terjadwal
+          </Button>
+        </Link>
       </div>
 
       {/* Statistics Cards */}

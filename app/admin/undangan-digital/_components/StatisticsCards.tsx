@@ -1,7 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Mail, Eye, DollarSign, FileCheck } from "lucide-react";
+import { Mail, Eye, DollarSign, FileCheck, Calendar } from "lucide-react";
+import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,8 +17,8 @@ export function StatisticsCards() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {[...Array(5)].map((_, i) => (
           <Skeleton key={i} className="h-32" />
         ))}
       </div>
@@ -25,7 +26,7 @@ export function StatisticsCards() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
@@ -40,6 +41,23 @@ export function StatisticsCards() {
           </p>
         </CardContent>
       </Card>
+
+      <Link href="/admin/undangan-digital/terjadwal" className="block">
+        <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Terjadwal
+            </CardTitle>
+            <Calendar className="h-4 w-4 text-blue-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-500">{stats?.scheduled_invitations || 0}</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Menunggu aktivasi otomatis
+            </p>
+          </CardContent>
+        </Card>
+      </Link>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

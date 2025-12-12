@@ -40,6 +40,7 @@ export interface DigitalInvitation {
     status: 'draft' | 'active' | 'expired';
     activated_at: string | null;
     expires_at: string | null;
+    scheduled_activation_at: string | null;
     view_count: number;
     last_viewed_at: string | null;
     created_at: string;
@@ -53,6 +54,7 @@ export interface InvitationStatistics {
     active_invitations: number;
     draft_invitations: number;
     expired_invitations: number;
+    scheduled_invitations: number;
     total_views: number;
     total_revenue: number;
     templates_count: number;
@@ -113,3 +115,31 @@ export async function deleteDigitalInvitation(id: number): Promise<SuccessRespon
     const response = await api.delete<SuccessResponse>(`/admin/digital-invitations/${id}`);
     return response.data;
 }
+
+export interface ScheduledInvitation extends DigitalInvitation {
+    scheduled_at_human: string;
+    is_overdue: boolean;
+}
+
+export interface ScheduledInvitationFilters {
+    search?: string;
+    timeframe?: 'upcoming' | 'overdue';
+    per_page?: number;
+    page?: number;
+}
+
+export async function getScheduledInvitations(
+    filters?: ScheduledInvitationFilters
+): Promise<PaginatedResponse<ScheduledInvitation>> {
+    const params = new URLSearchParams();
+    if (filters?.search) params.append('search', filters.search);
+    if (filters?.timeframe) params.append('timeframe', filters.timeframe);
+    if (filters?.per_page) params.append('per_page', filters.per_page.toString());
+    if (filters?.page) params.append('page', filters.page.toString());
+
+    const response = await api.get<PaginatedResponse<ScheduledInvitation>>(
+        `/admin/digital-invitations/scheduled${params.toString() ? `?${params.toString()}` : ''}`
+    );
+    return response.data;
+}
+
