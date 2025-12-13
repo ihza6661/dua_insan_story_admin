@@ -18,10 +18,12 @@ export const getImageUrl = (path: string | null | undefined): string => {
 };
 
 export const formatRupiah = (amount: number): string => {
+  // Divide by 1000 to remove last 3 digits
+  const amountInThousands = Math.floor(amount / 1000);
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(amountInThousands);
 };
