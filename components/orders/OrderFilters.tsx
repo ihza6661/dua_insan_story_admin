@@ -23,18 +23,18 @@ interface OrderFiltersProps {
 }
 
 const ORDER_STATUSES = [
-  { value: "pending_payment", label: "Menunggu Pembayaran" },
-  { value: "partially_paid", label: "Dibayar Sebagian" },
-  { value: "paid", label: "Lunas" },
-  { value: "processing", label: "Diproses" },
-  { value: "design_approval", label: "Persetujuan Desain" },
-  { value: "in_production", label: "Produksi" },
-  { value: "shipped", label: "Dikirim" },
-  { value: "delivered", label: "Terkirim" },
-  { value: "completed", label: "Selesai" },
-  { value: "cancelled", label: "Dibatalkan" },
-  { value: "failed", label: "Gagal" },
-  { value: "refunded", label: "Refund" },
+  { value: "Pending Payment", label: "Menunggu Pembayaran" },
+  { value: "Partially Paid", label: "Dibayar Sebagian" },
+  { value: "Paid", label: "Lunas" },
+  { value: "Processing", label: "Diproses" },
+  { value: "Design Approval", label: "Persetujuan Desain" },
+  { value: "In Production", label: "Produksi" },
+  { value: "Shipped", label: "Dikirim" },
+  { value: "Delivered", label: "Terkirim" },
+  { value: "Completed", label: "Selesai" },
+  { value: "Cancelled", label: "Dibatalkan" },
+  { value: "Failed", label: "Gagal" },
+  { value: "Refunded", label: "Refund" },
 ]
 
 const PAYMENT_STATUSES = [
