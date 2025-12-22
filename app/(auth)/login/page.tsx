@@ -78,7 +78,7 @@ export default function LoginPage() {
               <span className="font-medium">Email:</span> admin@example.com
             </p>
             <p className="text-sm">
-              <span className="font-medium">Password:</span> password123
+              <span className="font-medium">Password:</span> password
             </p>
           </AlertDescription>
         </Alert>
