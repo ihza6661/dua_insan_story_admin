@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { loginSchema, LoginSchema } from "@/lib/schemas";
 import { GenericError, LoginSuccessResponse } from "@/lib/types";
 import { useAuthStore } from "@/store/auth.store";
@@ -67,6 +68,21 @@ export default function LoginPage() {
             Masukkan email dan password Anda untuk masuk ke panel admin.
           </p>
         </div>
+        
+        <Alert className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+          <AlertTitle className="text-blue-900 dark:text-blue-100 font-semibold">
+            Informasi Login
+          </AlertTitle>
+          <AlertDescription className="text-blue-800 dark:text-blue-200 space-y-1">
+            <p className="text-sm">
+              <span className="font-medium">Email:</span> admin@example.com
+            </p>
+            <p className="text-sm">
+              <span className="font-medium">Password:</span> password123
+            </p>
+          </AlertDescription>
+        </Alert>
+        
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
