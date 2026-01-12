@@ -227,9 +227,9 @@ export function DesignProofSection({ orderId, orderItems }: DesignProofSectionPr
                 className="border rounded-lg p-4 flex items-start justify-between"
               >
                 <div className="flex items-start space-x-4 flex-1">
-                  {proof.thumbnail_url ? (
+                  {(proof.thumbnail_url || proof.file_url || proof.full_file_url) ? (
                     <Image
-                      src={getStorageUrl(proof.thumbnail_url, proof.full_thumbnail_url) || ''}
+                      src={getStorageUrl(proof.thumbnail_url || proof.file_url, proof.full_thumbnail_url || proof.full_file_url) || ''}
                       alt={proof.file_name || 'Design proof'}
                       width={80}
                       height={80}
