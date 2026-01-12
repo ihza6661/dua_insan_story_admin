@@ -203,6 +203,8 @@ export interface DesignProof {
     file_type: string | null;
     file_size: number | null;
     thumbnail_url: string | null;
+    full_file_url?: string | null;
+    full_thumbnail_url?: string | null;
     status: 'pending_approval' | 'approved' | 'revision_requested' | 'rejected';
     reviewed_at: string | null;
     reviewed_by: number | null;

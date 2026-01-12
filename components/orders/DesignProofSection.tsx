@@ -39,7 +39,12 @@ interface DesignProofSectionProps {
 }
 
 // Helper function to get full storage URL
-const getStorageUrl = (path: string | null): string | null => {
+const getStorageUrl = (path: string | null, fullUrl?: string | null): string | null => {
+  // Prefer full_file_url or full_thumbnail_url if available
+  if (fullUrl) {
+    return fullUrl;
+  }
+  
   if (!path) return null;
   
   // If already a full URL, return as is
@@ -224,7 +229,7 @@ export function DesignProofSection({ orderId, orderItems }: DesignProofSectionPr
                 <div className="flex items-start space-x-4 flex-1">
                   {proof.thumbnail_url ? (
                     <Image
-                      src={getStorageUrl(proof.thumbnail_url) || ''}
+                      src={getStorageUrl(proof.thumbnail_url, proof.full_thumbnail_url) || ''}
                       alt={proof.file_name || 'Design proof'}
                       width={80}
                       height={80}
@@ -265,7 +270,7 @@ export function DesignProofSection({ orderId, orderItems }: DesignProofSectionPr
                     variant="outline"
                     asChild
                   >
-                    <a href={getStorageUrl(proof.file_url) || ''} target="_blank" rel="noopener noreferrer">
+                    <a href={getStorageUrl(proof.file_url, proof.full_file_url) || ''} target="_blank" rel="noopener noreferrer">
                       <Download className="w-4 h-4" />
                     </a>
                   </Button>
